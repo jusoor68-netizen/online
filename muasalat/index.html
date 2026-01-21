@@ -12,15 +12,20 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
-        /* 1. المتغيرات والألوان (الهوية الجديدة - لمسة) */
+        /* 1. المتغيرات والألوان (أسود وذهبي - فخامة) */
         :root {
-            --brand-primary: #8b5cf6;      /* بنفسجي للإبداع واللمسة */
-            --brand-secondary: #06b6d4;    /* سماوي للتقنية */
-            --brand-accent: #f43f5e;       /* أحمر للطاقة والحيوية */
-            --bg-dark: #0f172a;           
-            --bg-card: #1e293b;           
-            --text-light: #f8fafc;        
-            --text-muted: #94a3b8;        
+            --brand-primary: #D4AF37;      /* ذهبي كلاسيكي */
+            --brand-secondary: #FFF8D6;    /* ذهبي فاتح/لامع */
+            --brand-dark-gold: #AA8C2C;    /* ذهبي داكن للحدود */
+            
+            --bg-dark: #050505;            /* أسود عميق جداً */
+            --bg-card: #121212;            /* رمادي داكن جداً للبطاقات */
+            --bg-gradient: linear-gradient(145deg, #1a1a1a, #0a0a0a);
+            
+            --text-light: #F9FAFB;         /* أبيض ناصع */
+            --text-gold: #E5C365;          /* نص ذهبي */
+            --text-muted: #9CA3AF;         /* فضي مطفي */
+            
             --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -37,6 +42,7 @@
             color: var(--text-light);
             line-height: 1.6;
             overflow-x: hidden;
+            background-image: radial-gradient(circle at 50% 0%, #222 0%, #050505 60%);
         }
 
         a { text-decoration: none; color: inherit; }
@@ -53,7 +59,7 @@
             position: relative;
         }
 
-        /* العناوين */
+        /* العناوين بلمسة ذهبية */
         .section-header {
             text-align: center;
             margin-bottom: 60px;
@@ -62,11 +68,12 @@
         .section-header h2 {
             font-size: 2.5rem;
             font-weight: 800;
-            background: linear-gradient(to right, var(--brand-primary), var(--brand-secondary));
+            background: linear-gradient(to right, var(--brand-secondary), var(--brand-primary), var(--brand-dark-gold));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 15px;
             display: inline-block;
+            text-shadow: 0px 4px 20px rgba(212, 175, 55, 0.15);
         }
 
         .section-header p {
@@ -78,14 +85,14 @@
 
         /* 2. شريط التنقل */
         .navbar {
-            background: rgba(15, 23, 42, 0.95);
+            background: rgba(5, 5, 5, 0.95);
             backdrop-filter: blur(12px);
             padding: 15px 0;
             position: fixed;
             width: 100%;
             top: 0;
             z-index: 1000;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
         }
 
         .nav-content {
@@ -103,24 +110,26 @@
             gap: 10px;
         }
         
+        .logo i { color: var(--brand-primary); }
         .logo span { color: var(--brand-primary); }
 
         .btn-main {
-            background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
-            color: #fff;
+            background: linear-gradient(135deg, var(--brand-primary), var(--brand-dark-gold));
+            color: #000;
             padding: 10px 30px;
             border-radius: 50px;
             font-weight: 700;
             transition: var(--transition);
             display: inline-block;
-            border: none;
+            border: 1px solid var(--brand-secondary);
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
         }
 
         .btn-main:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.5);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+            background: linear-gradient(135deg, var(--brand-secondary), var(--brand-primary));
         }
 
         /* 3. Hero Section */
@@ -130,7 +139,8 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            background: radial-gradient(circle at center, rgba(139, 92, 246, 0.15), transparent 60%);
+            /* تأثير إضاءة ذهبية خافتة */
+            background: radial-gradient(circle at center, rgba(212, 175, 55, 0.08), transparent 50%);
             padding-top: 80px;
         }
 
@@ -142,8 +152,9 @@
         }
         
         .hero h1 .highlight {
-            color: var(--brand-secondary);
+            color: var(--brand-primary);
             position: relative;
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
         }
 
         .hero p {
@@ -164,12 +175,14 @@
         }
 
         .tag {
-            background: rgba(255,255,255,0.05);
+            background: rgba(255,255,255,0.03);
             padding: 8px 16px;
-            border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 4px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
             font-size: 0.9rem;
-            color: var(--brand-secondary);
+            color: var(--brand-primary);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
         }
 
         /* 4. البطاقات المقلوبة (Flip Cards) - Core Feature */
@@ -196,7 +209,6 @@
             transform-style: preserve-3d;
         }
 
-        /* تفعيل القلب عند إضافة كلاس flipped */
         .flip-card.flipped .flip-card-inner {
             transform: rotateY(180deg);
         }
@@ -207,20 +219,19 @@
             height: 100%;
             -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
-            border-radius: 20px;
+            border-radius: 12px; /* زوايا أكثر حدة للفخامة */
             padding: 30px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        /* الوجه الأمامي (المشكلة) */
+        /* الوجه الأمامي (المشكلة) - تصميم داكن جداً */
         .flip-card-front {
-            background-color: #334155; /* رمادي */
-            color: #cbd5e1;
-            border: 1px solid rgba(255,255,255,0.05);
+            background: #1a1a1a;
+            border: 1px solid #333;
         }
 
         .flip-card-front h3 {
@@ -231,25 +242,32 @@
 
         .flip-card-front .icon {
             font-size: 3rem;
-            color: #94a3b8;
+            color: #444; /* رمادي داكن للأيقونة */
             margin-bottom: 10px;
+            transition: 0.3s;
+        }
+        
+        .flip-card:hover .flip-card-front .icon {
+            color: var(--brand-primary);
         }
 
         .click-hint {
             margin-top: 30px;
             font-size: 0.8rem;
             opacity: 0.6;
-            border: 1px dashed rgba(255,255,255,0.3);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            color: var(--brand-primary);
             padding: 5px 15px;
-            border-radius: 20px;
+            border-radius: 50px;
         }
 
-        /* الوجه الخلفي (الحل) */
+        /* الوجه الخلفي (الحل) - أسود مع إطار ذهبي */
         .flip-card-back {
-            background: linear-gradient(135deg, var(--bg-card), #0f172a);
+            background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
             color: var(--text-light);
             transform: rotateY(180deg);
-            border: 2px solid var(--brand-primary);
+            border: 1px solid var(--brand-primary);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.1);
         }
 
         .flip-card-back h3 {
@@ -275,14 +293,17 @@
             font-size: 0.9rem;
             position: relative;
             padding-right: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding-bottom: 5px;
         }
 
         .flip-card-back li::before {
-            content: '✓';
-            color: var(--brand-secondary);
+            content: '✦'; /* شكل ماسي بدلاً من صح */
+            color: var(--brand-primary);
             position: absolute;
             right: 0;
-            font-weight: bold;
+            font-size: 0.8rem;
+            top: 4px;
         }
 
         /* 5. Ecosystem Section */
@@ -301,23 +322,37 @@
         }
 
         .eco-card {
-            background: rgba(255,255,255,0.03);
+            background: rgba(255,255,255,0.02);
             padding: 25px;
-            border-radius: 16px;
+            border-radius: 8px;
             border: 1px solid rgba(255,255,255,0.05);
             transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .eco-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 2px;
+            height: 100%;
+            background: var(--brand-dark-gold);
+            opacity: 0.5;
         }
 
         .eco-card:hover {
-            background: rgba(255,255,255,0.05);
-            border-color: var(--brand-primary);
+            background: rgba(255,255,255,0.04);
+            border-color: var(--brand-dark-gold);
         }
 
         .eco-icon {
             width: 50px;
             height: 50px;
-            background: rgba(139, 92, 246, 0.1);
-            border-radius: 12px;
+            background: linear-gradient(135deg, #222, #000);
+            border: 1px solid var(--brand-dark-gold);
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -336,9 +371,10 @@
         .pilot-step {
             background: var(--bg-card);
             padding: 30px;
-            border-radius: 16px;
+            border-radius: 8px;
             margin-bottom: 25px;
-            border-left: 4px solid var(--brand-accent);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-right: 3px solid var(--brand-primary); /* تغيير الجانب للعربية */
             position: relative;
         }
 
@@ -348,33 +384,66 @@
             top: -15px;
             width: 40px;
             height: 40px;
-            background: var(--brand-accent);
-            color: white;
+            background: linear-gradient(135deg, var(--brand-primary), var(--brand-dark-gold));
+            color: #000;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
             font-size: 1.2rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
 
         .bonus-box {
-            background: linear-gradient(45deg, #1e1b4b, #312e81);
-            padding: 20px;
-            border-radius: 12px;
+            background: linear-gradient(to bottom, #151515, #0a0a0a);
+            padding: 25px;
+            border-radius: 8px;
             margin-top: 20px;
-            border: 1px dashed var(--brand-secondary);
+            border: 1px solid var(--brand-dark-gold);
             text-align: center;
+            position: relative;
+        }
+        
+        .bonus-box::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 8px;
+            padding: 1px;
+            background: linear-gradient(45deg, transparent, var(--brand-primary), transparent);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
         }
 
-        .bonus-box h4 { color: var(--brand-secondary); margin-bottom: 5px; }
+        .bonus-box h4 { 
+            color: var(--brand-primary); 
+            margin-bottom: 10px; 
+            font-size: 1.3rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .bonus-condition {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .bonus-condition strong {
+            color: var(--brand-secondary);
+        }
 
         /* Footer */
         footer {
-            background: #020617;
+            background: #000;
             padding: 60px 0;
             text-align: center;
-            border-top: 1px solid rgba(255,255,255,0.05);
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
             margin-top: 80px;
         }
 
@@ -382,7 +451,7 @@
             .hero h1 { font-size: 2.5rem; }
             .ecosystem-grid { grid-template-columns: 1fr; }
             .step-number { left: auto; right: -10px; }
-            .pilot-step { border-left: none; border-right: 4px solid var(--brand-accent); }
+            .pilot-step { border-right: none; border-left: 3px solid var(--brand-primary); }
         }
     </style>
 </head>
@@ -392,7 +461,7 @@
     <nav class="navbar">
         <div class="container nav-content">
             <div class="logo">
-                <i class="fa-solid fa-fingerprint" style="color: var(--brand-primary);"></i>
+                <i class="fa-solid fa-fingerprint"></i>
                 Lamsa<span>.</span>
             </div>
             <a href="#contact" class="btn-main">تواصل معنا</a>
@@ -407,7 +476,7 @@
                 <span class="tag">Remote Onboarding</span>
                 <span class="tag">Unified API</span>
             </div>
-            <h1>من <span style="text-decoration: line-through; opacity: 0.5;">مواصلات</span> إلى <span class="highlight">لمسة</span><br>التمكين الذاتي للمدفوعات</h1>
+            <h1>من <span style="text-decoration: line-through; opacity: 0.3;">مواصلات</span> إلى <span class="highlight">لمسة</span><br>التمكين الذاتي للمدفوعات</h1>
             <p>تحول استراتيجي (Pivot) من الاعتماد على البنية التحتية المادية المكلفة إلى نموذج هجين ذكي يعتمد على التكامل الرقمي والوصول الشامل.</p>
             <a href="#pivot" class="btn-main" style="padding: 15px 40px; font-size: 1.2rem;">اكتشف التحول</a>
         </div>
@@ -489,7 +558,7 @@
     </section>
 
     <!-- Ecosystem Section -->
-    <section id="ecosystem" style="background: rgba(255,255,255,0.02);">
+    <section id="ecosystem" style="background: rgba(255,255,255,0.01);">
         <div class="container">
             <div class="section-header">
                 <h2>منظومة الكل رابح</h2>
@@ -543,9 +612,12 @@
                     <h3>التحفيز (The Hook)</h3>
                     <p>هنا تكمن الخدعة الذكية لتحويل البطاقة المجهولة إلى معرفة:</p>
                     <div class="bonus-box">
-                        <h4>🔥 عرض الإطلاق</h4>
-                        <p>"اشحن بـ 10,000 ريال واحصل على 20,000 ريال رصيد فوراً"</p>
-                        <p style="font-size: 0.9rem; margin-top: 10px; color: var(--text-muted);">* الشرط: تصل رسالة للموظف بضرورة ربط البطاقة بهاتفه (عبر CVV) لتفعيل البونص.</p>
+                        <h4><i class="fa-solid fa-gem" style="margin-left:8px;"></i> عرض الإطلاق الحصري</h4>
+                        <p style="font-size: 1.1rem; color: #fff;">"اشحن بـ 10,000 ريال واحصل على 20,000 ريال رصيد فوراً"</p>
+                        <p class="bonus-condition">
+                            <i class="fa-solid fa-circle-exclamation"></i>
+                            <strong>الشرط:</strong> لتفعيل البونص يجب تغذية البطاقة بـ 10,000 ريال من <u>مركز الخدمة نفسه</u> لإثبات الجدية وتفعيل البطاقة.
+                        </p>
                     </div>
                 </div>
 
@@ -564,9 +636,9 @@
         <div class="container">
             <h2 style="color: #fff; margin-bottom: 20px;">الخلاصة</h2>
             <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 30px;">
-                <span style="color: var(--brand-secondary);"><i class="fa-solid fa-check"></i> لا استيراد أجهزة</span>
-                <span style="color: var(--brand-secondary);"><i class="fa-solid fa-check"></i> انتشار سريع</span>
-                <span style="color: var(--brand-secondary);"><i class="fa-solid fa-check"></i> إدارة ذاتية</span>
+                <span style="color: var(--brand-primary);"><i class="fa-solid fa-check"></i> لا استيراد أجهزة</span>
+                <span style="color: var(--brand-primary);"><i class="fa-solid fa-check"></i> انتشار سريع</span>
+                <span style="color: var(--brand-primary);"><i class="fa-solid fa-check"></i> إدارة ذاتية</span>
             </div>
             <a href="mailto:invest@lamsa.yemen" class="btn-main">استثمر في التحول</a>
             <p style="margin-top: 30px; font-size: 0.9rem; opacity: 0.5;">&copy; 2024 Lamsa - Powered by Mwasalat</p>
