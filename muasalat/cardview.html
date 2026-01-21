@@ -68,6 +68,21 @@
             transform: translateX(-50%);
         }
 
+        /* Media Query for Mobile to fix spacing */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 120px; /* زيادة المساحة العلوية في الموبايل */
+                gap: 50px;
+            }
+            .nav-top {
+                top: 40px;
+                left: 50%;
+                right: auto;
+                transform: translateX(-50%); /* توسيط الزر في الموبايل */
+                width: max-content;
+            }
+        }
+
         /* --- 1. تصميم البطاقة (The Card) --- */
         .card-wrapper {
             position: relative;
