@@ -134,4 +134,281 @@
         .ph-box.black-box {
             background: #000;
             border: 1px solid var(--gold);
-            box-shadow: 0 0 15px rgba(212
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.1);
+        }
+
+        .ph-icon { font-size: 2rem; margin-bottom: 10px; color: var(--gold); }
+        .ph-arrow { color: var(--text-gray); font-size: 1.5rem; }
+
+        /* Slide 3: Printing Strategy */
+        .strategy-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+
+        .strategy-col h3 { color: var(--gold); margin-bottom: 10px; font-size: 1.2rem; }
+        .strategy-col ul { list-style: none; }
+        .strategy-col li { margin-bottom: 10px; font-size: 0.95rem; color: var(--text-gray); }
+        .strategy-col li i { color: var(--gold); margin-left: 8px; }
+
+        .strategy-note {
+            text-align: center;
+            background: rgba(212, 175, 55, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            color: var(--gold);
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        /* Slide 4: Journey Flow */
+        .flow-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 8px;
+            border-right: 3px solid transparent;
+        }
+
+        .flow-step.math { border-color: #3b82f6; }
+        .flow-step.crypto { border-color: var(--gold); }
+        .flow-step.defense { border-color: var(--danger); }
+
+        .step-icon {
+            width: 40px; height: 40px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+
+        /* Slide 6: Admin Tool */
+        .admin-mockup {
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #333;
+            font-family: monospace;
+        }
+
+        .mock-input {
+            background: #000;
+            border: 1px solid #444;
+            color: #fff;
+            padding: 8px;
+            width: 100%;
+            margin-bottom: 10px;
+            border-radius: 4px;
+        }
+
+        .mock-btn {
+            background: #333;
+            color: #fff;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: not-allowed;
+        }
+
+        .log-entry { font-size: 0.8rem; color: #666; margin-top: 5px; }
+
+        /* Navigation */
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .btn-link {
+            text-decoration: none;
+            color: var(--text-gray);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.3s;
+        }
+
+        .btn-link:hover { color: var(--gold); }
+
+        @media (max-width: 768px) {
+            .philosophy-grid { grid-template-columns: 1fr; }
+            .ph-arrow { transform: rotate(90deg); margin: 10px 0; }
+            .strategy-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <!-- Header -->
+        <header class="header">
+            <span class="version-badge">Version 4.0</span>
+            <h1>ميثاق النظام الوسيط</h1>
+            <p>عرض توضيحي لأصحاب المصلحة حول أمن العمليات وإدارة الأسرار</p>
+        </header>
+
+        <!-- Slide 1: Philosophy -->
+        <section class="slide-section">
+            <div class="slide-title">
+                <div class="slide-number">01</div>
+                <h2>الفلسفة الأساسية <span>الخزنة السوداء (Black Box)</span></h2>
+            </div>
+            <div class="content-card">
+                <p style="margin-bottom: 20px; text-align: center;">النظام المركزي التجاري لا يرى ولا يخزن رمز الـ CVV أبداً.</p>
+                <div class="philosophy-grid">
+                    <div class="ph-box">
+                        <i class="fa-solid fa-coins ph-icon"></i>
+                        <h3>النظام المركزي</h3>
+                        <p style="font-size: 0.8rem; color: #888;">يتولى الأموال والحسابات</p>
+                    </div>
+                    <div class="ph-arrow"><i class="fa-solid fa-arrow-left"></i></div>
+                    <div class="ph-box black-box">
+                        <i class="fa-solid fa-user-secret ph-icon"></i>
+                        <h3>النظام الوسيط</h3>
+                        <p style="font-size: 0.8rem; color: #888;">يتولى الأسرار (الخزنة)</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 2 (Renumbered): Printing Strategy -->
+        <section class="slide-section">
+            <div class="slide-title">
+                <div class="slide-number">02</div>
+                <h2>استراتيجية الطباعة <span>المرونة والمسؤولية</span></h2>
+            </div>
+            <div class="content-card">
+                <div class="strategy-grid">
+                    <div class="strategy-col">
+                        <h3><i class="fa-solid fa-network-wired"></i> المسار أ (المفضل)</h3>
+                        <ul>
+                            <li><i class="fa-solid fa-check"></i> طباعة عند الطلب (Just-in-Time).</li>
+                            <li><i class="fa-solid fa-check"></i> اتصال API مباشر بالطابعة.</li>
+                            <li><i class="fa-solid fa-check"></i> البيانات لا تُخزن في المصنع.</li>
+                        </ul>
+                    </div>
+                    <div class="strategy-col" style="border-right: 1px solid rgba(255,255,255,0.1); padding-right: 20px;">
+                        <h3><i class="fa-solid fa-file-excel"></i> المسار ب (تصدير)</h3>
+                        <ul>
+                            <li><i class="fa-solid fa-check"></i> تصدير ملفات إكسل (Excel).</li>
+                            <li><i class="fa-solid fa-check"></i> تفعيل "بند إخلاء المسؤولية التقنية".</li>
+                            <li><i class="fa-solid fa-check"></i> مسؤولية الحماية تنتقل لمدير الطباعة.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="strategy-note">
+                    <i class="fa-solid fa-info-circle"></i> تتولى إدارة البطائق هذه المهمة بالكامل.
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 3 (Renumbered): Verification Journey -->
+        <section class="slide-section">
+            <div class="slide-title">
+                <div class="slide-number">03</div>
+                <h2>رحلة التحقق الذكي <span>الدرع ضد DoS</span></h2>
+            </div>
+            <div class="content-card">
+                <div class="flow-steps">
+                    <div class="flow-step math">
+                        <div class="step-icon" style="color: #3b82f6;"><i class="fa-solid fa-calculator"></i></div>
+                        <div>
+                            <strong>1. الفلتر الرياضي (Check Digit)</strong>
+                            <p style="font-size: 0.9rem; color: #aaa;">هل الرقم صحيح رياضياً؟ إذا لا -> رفض فوري (لا يُحسب اختراق).</p>
+                        </div>
+                    </div>
+                    <div class="flow-step crypto">
+                        <div class="step-icon" style="color: var(--gold);"><i class="fa-solid fa-key"></i></div>
+                        <div>
+                            <strong>2. الفلتر المشفر (HMAC)</strong>
+                            <p style="font-size: 0.9rem; color: #aaa;">هل الـ CVV يطابق التشفير المخزن؟</p>
+                        </div>
+                    </div>
+                    <div class="flow-step defense">
+                        <div class="step-icon" style="color: var(--danger);"><i class="fa-solid fa-shield-virus"></i></div>
+                        <div>
+                            <strong>3. الذكاء الدفاعي (عند الخطأ)</strong>
+                            <p style="font-size: 0.9rem; color: #aaa;">نفس الـ IP؟ -> حظر مؤقت. هجوم موزع؟ -> قفل البطاقة نهائياً بعد 5 محاولات.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 4 (Renumbered): Circuit Breaker -->
+        <section class="slide-section">
+            <div class="slide-title">
+                <div class="slide-number">04</div>
+                <h2>استمرارية الخدمة <span>Circuit Breaker</span></h2>
+            </div>
+            <div class="content-card" style="text-align: center;">
+                <i class="fa-solid fa-toggle-off" style="font-size: 3rem; color: var(--danger); margin-bottom: 20px;"></i>
+                <p>إذا تأخر النظام المركزي في الرد، يقوم النظام الوسيط بقطع الاتصال فوراً ويعتذر للمستخدم.</p>
+                <p style="font-size: 0.9rem; color: var(--gold); margin-top: 10px;">الهدف: حماية موارد الخادم من الانهيار والسماح بإعادة المحاولة لاحقاً.</p>
+            </div>
+        </section>
+
+        <!-- Slide 5 (Renumbered): Admin Tool -->
+        <section class="slide-section">
+            <div class="slide-title">
+                <div class="slide-number">05</div>
+                <h2>أداة المشرفين <span>Support with Zero-Trust</span></h2>
+            </div>
+            <div class="content-card">
+                <div class="admin-mockup">
+                    <div style="margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px;">
+                        <span style="color: var(--success);">● System Online</span> | Admin Console
+                    </div>
+                    
+                    <label style="font-size: 0.8rem; color: #888;">رقم التذكرة (Ticket ID) *</label>
+                    <input type="text" class="mock-input" value="TCK-99283" readonly>
+                    
+                    <label style="font-size: 0.8rem; color: #888;">رقم البطاقة (من العميل)</label>
+                    <input type="text" class="mock-input" value="**** **** **** 4829">
+                    
+                    <label style="font-size: 0.8rem; color: #888;">CVV (من العميل)</label>
+                    <input type="password" class="mock-input" value="***">
+                    
+                    <button class="mock-btn">تحقق (Check)</button>
+                    
+                    <div style="margin-top: 20px; border-top: 1px dashed #444; padding-top: 10px;">
+                        <p style="color: var(--gold);">Output: MATCH ✅</p>
+                        <p class="log-entry">[AUDIT LOG]: User Admin_01 checked card ...4829 at 10:42 AM</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer / Conclusion -->
+        <footer style="text-align: center; margin-top: 60px; padding-bottom: 40px;">
+            <i class="fa-solid fa-check-double" style="font-size: 2rem; color: var(--gold); margin-bottom: 20px;"></i>
+            <h3 style="margin-bottom: 10px;">الخلاصة</h3>
+            <p style="color: var(--text-gray); max-width: 600px; margin: 0 auto;">
+                لقد انتقلنا من نظام "آمن نظرياً" إلى نظام "قوي تشغيلياً" يعالج أخطاء الطباعة، ويصد الهجمات الكيدية، ويمنح الدعم الفني الأدوات اللازمة.
+            </p>
+
+            <div class="nav-buttons">
+                <a href="index.html" class="btn-link">
+                    الرئيسية <i class="fa-solid fa-home"></i>
+                </a>
+            </div>
+        </footer>
+
+    </div>
+
+</body>
+</html>
