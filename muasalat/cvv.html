@@ -184,6 +184,7 @@
         .flow-step.math { border-color: #3b82f6; }
         .flow-step.crypto { border-color: var(--gold); }
         .flow-step.defense { border-color: var(--danger); }
+        .flow-step.success-step { border-color: var(--success); }
 
         .step-icon {
             width: 40px; height: 40px;
@@ -336,6 +337,13 @@
                         <div>
                             <strong>2. الذكاء الدفاعي (عند الخطأ)</strong>
                             <p style="font-size: 0.9rem; color: #aaa;">نفس الـ IP؟ -> حظر مؤقت. هجوم موزع؟ -> قفل البطاقة نهائياً بعد 5 محاولات.</p>
+                        </div>
+                    </div>
+                    <div class="flow-step success-step">
+                        <div class="step-icon" style="color: var(--success);"><i class="fa-solid fa-paper-plane"></i></div>
+                        <div>
+                            <strong>3. الإرسال للمركزي (عند النجاح)</strong>
+                            <p style="font-size: 0.9rem; color: #aaa;">إذا اكتمل التحقق الناجح، يرسل الطلب للنظام المركزي.</p>
                         </div>
                     </div>
                 </div>
