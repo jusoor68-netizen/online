@@ -232,4 +232,145 @@
             gsap.to(container, { opacity: 0, y: 10, duration: 0.3, onComplete: () => {
                 content.innerText = text;
                 content.style.color = color;
-                gsap.to(container, { opacity
+                gsap.to(container, { opacity: 1, y: 0, duration: 0.5 });
+            }});
+        }
+
+        function createStream(pathId) {
+            const container = document.getElementById('stream-container');
+            const path = document.getElementById(pathId);
+            const pathLength = path.getTotalLength();
+            
+            for(let i=0; i<3; i++) {
+                const dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                dot.setAttribute("r", "5");
+                dot.classList.add("value-particle");
+                container.appendChild(dot);
+                
+                gsap.fromTo(dot, {opacity: 0}, {
+                    opacity: 1, duration: 2, repeat: -1, delay: i * 0.7,
+                    onUpdate: function() {
+                        const pt = path.getPointAtLength(this.progress() * pathLength);
+                        dot.setAttribute("cx", pt.x);
+                        dot.setAttribute("cy", pt.y);
+                    }
+                });
+            }
+        }
+
+        function togglePause() {
+            isPaused = !isPaused;
+            tl.paused(isPaused);
+            document.getElementById('pause-btn').innerText = isPaused ? "استئناف" : "إيقاف مؤقت";
+        }
+
+        function startShow() {
+            reset();
+            buildTimeline();
+            tl.play();
+            document.getElementById('play-btn').innerText = "إعادة التشغيل";
+            document.getElementById('pause-btn').classList.remove('hidden');
+            isPaused = false;
+        }
+
+        function reset() {
+            if(tl) tl.kill();
+            gsap.set(".scene-group", { opacity: 0, visibility: "hidden" });
+            gsap.set("#display-text", { opacity: 0 });
+            gsap.set("#check-pay", { opacity: 0 });
+            gsap.set("#nfc-light", { fill: "#475569" });
+            document.getElementById('stream-container').innerHTML = "";
+        }
+
+        function buildTimeline() {
+            tl = gsap.timeline({
+                onUpdate: function() {
+                    const p = this.progress() * 100;
+                    document.getElementById('master-progress').style.width = p + '%';
+                    const s = Math.floor(this.time());
+                    document.getElementById('timer').innerText = `0${Math.floor(s/60)}:${(s%60).toString().padStart(2, '0')}`;
+                }
+            });
+
+            // --- مشهد 1: المقدمة والمشاكل (0-35ث) ---
+            tl.add(() => {
+                document.getElementById('label').innerText = "المشهد 1: الأزمات اليومية";
+                gsap.set("#scene1", { opacity: 1, visibility: "visible" });
+                updateCaptions("ماعندك نت ونسيت الكاش في البيت؟");
+            }, 0);
+
+            tl.to("#char-main", { x: "+=3", repeat: 40, yoyo: true, duration: 0.1 }, 1);
+            
+            tl.add(() => updateCaptions("أو رصيدك مشتت في أكثر من محفظة.. وصعب تجمعه؟"), 6);
+            tl.add(() => updateCaptions("بالإضافة لانتظار الفكة المزعج عند الكاشير..."), 12);
+            tl.add(() => updateCaptions("الكاش فعلاً يبطّئ كل شيء في يومك."), 18);
+
+            tl.to("#bill-1000", { opacity: 1, scale: 1.1, duration: 1 }, 19);
+            
+            // ظهور الحل والـ POS
+            tl.to("#bill-1000", { opacity: 0, duration: 0.6 }, 25);
+            tl.to("#lamsa-card-tap", { opacity: 1, x: 730, y: 380, duration: 1, ease: "back.out" }, 26);
+            tl.add(() => updateCaptions("الحل: بطاقة «لمسة» للتحصيل الفوري", "#4F46E5"), 27);
+            
+            tl.to("#pos-terminal", { opacity: 1, duration: 0.8 }, 29);
+            tl.add(() => updateCaptions("مرّر البطاقة على جهاز الـ POS."), 30);
+            
+            // تمرير واقعي نحو الـ POS في اليسار
+            tl.to("#lamsa-card-tap", { x: 150, y: 380, rotate: 20, duration: 1.5, ease: "power3.inOut" }, 31);
+            tl.to("#nfc-light", { fill: "#22C55E", filter: "url(#glow-effect)", duration: 0.2 }, 32.2);
+            tl.to("#check-pay", { opacity: 1, duration: 0.4 }, 32.4);
+            tl.add(() => updateCaptions("ثوانٍ… وتم الدفع بنجاح أوفلاين.", "#059669"), 33);
+
+            // --- مشهد 2: التفعيل الرقمي (36-65ث) ---
+            tl.add(() => {
+                document.getElementById('label').innerText = "المشهد 2: تفعيل البطاقة";
+                gsap.to("#scene1", { opacity: 0, duration: 0.6 });
+                gsap.set("#scene2", { opacity: 1, visibility: "visible" });
+                updateCaptions("احصل عليها بسهولة من أقرب وكيل.");
+            }, 38);
+
+            // المظروف الموسط
+            tl.to("#package-s2", { opacity: 1, y: 150, duration: 1.2, ease: "back.out" }, 40);
+            tl.add(() => updateCaptions("تصلك داخل باقة ترحيبية جاهزة للاستخدام."), 46);
+            
+            // قراءة QR
+            tl.to("#package-s2", { opacity: 0, duration: 0.5 }, 51);
+            tl.to("#scan-setup", { opacity: 1, duration: 0.8 }, 52);
+            tl.to("#phone-scanner", { opacity: 1, y: 120, duration: 1, ease: "back.out" }, 53);
+            tl.add(() => updateCaptions("امسح رمز QR من خلف البطاقة للتفعيل."), 54);
+            tl.fromTo("#laser-sweep", {y: -40}, {y: 40, repeat: 4, yoyo: true, duration: 0.7}, 55);
+
+            // إضافة خطوة CVV
+            tl.add(() => updateCaptions("خصص بطاقتك عبر إدخال رمز الـ CVV"), 60);
+            
+            tl.to(["#scan-setup", "#phone-scanner"], { opacity: 0, duration: 0.6 }, 63);
+            tl.to("#gold-finale", { opacity: 1, scale: 1.1, duration: 1 }, 64);
+            tl.to("#lock-icon", { opacity: 1, y: 0, duration: 0.8 }, 66);
+            tl.add(() => updateCaptions("بطاقتك الآن محمية، وموثقة باسمك.", "#B45309"), 67);
+
+            // --- مشهد 3: بوابة الشحن (66-90ث) ---
+            tl.add(() => {
+                document.getElementById('label').innerText = "المشهد 3: بوابة الشحن";
+                gsap.to("#scene2", { opacity: 0, duration: 0.6 });
+                gsap.set("#scene3", { opacity: 1, visibility: "visible" });
+                updateCaptions("بوابة شحن موحدة… لكل أموالك.");
+            }, 72);
+
+            tl.to(".icon-box", { opacity: 1, stagger: 0.3, duration: 0.7 }, 74);
+            tl.add(() => {
+                createStream("p1");
+                createStream("p2");
+                createStream("p3");
+            }, 76);
+
+            tl.add(() => updateCaptions("اشحن من حسابك البنكي أو المحافظ الإلكترونية."), 79);
+            tl.add(() => updateCaptions("أو عبر الوكلاء المعتمدين وحتى من البقالة."), 85);
+            tl.add(() => updateCaptions("لمسة: جسر العبور للاقتصاد الرقمي.", "#4F46E5"), 89);
+
+            tl.to({}, { duration: 1 }, 90);
+        }
+
+        window.onload = reset;
+    </script>
+</body>
+</html>
