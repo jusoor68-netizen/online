@@ -39,20 +39,21 @@
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(12px);
             /* استخدام وحدات مرنة بدلاً من الثابتة */
-            padding: 1rem 1.5rem;
-            border-radius: 20px;
+            padding: 0.8rem 1.2rem;
+            border-radius: 16px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.05);
             border: 1px solid rgba(255, 255, 255, 0.8);
             width: 95%; /* للموبايل */
             max-width: 600px; /* للكمبيوتر */
-            min-height: 70px;
+            min-height: 60px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
         /* تصغير الخطوط في الموبايل */
         #caption-content {
-            font-size: clamp(1.1rem, 4vw, 2.25rem); /* خط مرن يتغير مع حجم الشاشة */
+            /* تم تصغير الحد الأدنى من 1.1rem إلى 0.9rem والنسبة المئوية */
+            font-size: clamp(0.9rem, 3.5vw, 2.25rem); 
             line-height: 1.3;
         }
         .scene-group {
@@ -81,7 +82,7 @@
 
     <div class="max-w-4xl w-full text-center mb-4 sm:mb-6">
         <h1 class="text-xl sm:text-2xl font-black text-slate-900 mb-1">مشروع «لمسة» — جسر العبور الرقمي</h1>
-        <p class="text-slate-500 font-medium text-xs sm:text-sm">متوافق مع جميع الشاشات • تحكم كامل</p>
+        <p class="text-slate-500 font-medium text-xs sm:text-sm">متوافقة مع الجميع • تحكم كامل</p>
     </div>
 
     <div class="stage-container max-w-6xl w-full">
@@ -324,7 +325,7 @@
             
             tl.add(() => updateCaptions("أو رصيدك مشتت في أكثر من محفظة.. وصعب تجمعه؟"), 6);
             tl.add(() => updateCaptions("بالإضافة لانتظار الفكة المزعج عند الكاشير..."), 12);
-            tl.add(() => updateCaptions("الكاش فعلاً يبطّئ كل شيء في يومك."), 18);
+            tl.add(() => updateCaptions("كل هذا فعلاً يبطّئ يومك."), 18);
 
             tl.to("#bill-1000", { opacity: 1, scale: 1.1, duration: 1 }, 19);
             tl.to("#icons-s1", { opacity: 1, duration: 0.8 }, 20);
@@ -332,7 +333,7 @@
             // ظهور الحل والـ POS
             tl.to("#bill-1000", { opacity: 0, duration: 0.6 }, 25);
             tl.to("#lamsa-card-tap", { opacity: 1, x: 730, y: 380, duration: 1, ease: "back.out" }, 26);
-            tl.add(() => updateCaptions("الحل: بطاقة «لمسة» للتحصيل الفوري", "#4F46E5"), 27);
+            tl.add(() => updateCaptions("الحل: بطاقة «لمسة» للدفع الفوري", "#4F46E5"), 27);
             
             tl.to("#pos-terminal", { opacity: 1, duration: 0.8 }, 29);
             tl.add(() => updateCaptions("مرّر البطاقة على جهاز الـ POS."), 30);
@@ -341,7 +342,7 @@
             tl.to("#lamsa-card-tap", { x: 150, y: 380, rotate: 20, duration: 1.5, ease: "power3.inOut" }, 31);
             tl.to("#nfc-light", { fill: "#22C55E", filter: "url(#glow-effect)", duration: 0.2 }, 32.2);
             tl.to("#check-pay", { opacity: 1, duration: 0.4 }, 32.4);
-            tl.add(() => updateCaptions("ثوانٍ… وتم الدفع بنجاح أوفلاين.", "#059669"), 33);
+            tl.add(() => updateCaptions("ثوانٍ… وتم الدفع بنجاح وبدون إنترنت.", "#059669"), 33);
 
             // --- مشهد 2: التفعيل الرقمي (36-65ث) ---
             tl.add(() => {
@@ -353,7 +354,7 @@
 
             // المظروف الموسط
             tl.to("#package-s2", { opacity: 1, y: 150, duration: 1.2, ease: "back.out" }, 40);
-            tl.add(() => updateCaptions("تصلك داخل باقة ترحيبية جاهزة للاستخدام."), 46);
+            tl.add(() => updateCaptions("تصلك وفيها باقة ترحيبية جاهزة للاستخدام."), 46);
             
             // قراءة QR
             tl.to("#package-s2", { opacity: 0, duration: 0.5 }, 51);
@@ -368,7 +369,7 @@
             tl.to(["#scan-setup", "#phone-scanner"], { opacity: 0, duration: 0.6 }, 63);
             tl.to("#gold-finale", { opacity: 1, scale: 1.1, duration: 1 }, 64);
             tl.to("#lock-icon", { opacity: 1, y: 0, duration: 0.8 }, 66);
-            tl.add(() => updateCaptions("بطاقتك الآن محمية، وموثقة باسمك.", "#B45309"), 67);
+            tl.add(() => updateCaptions("بطاقتك الآن محمية، وموثقة برقمك فقط.", "#B45309"), 67);
 
             // --- مشهد 3: بوابة الشحن (66-90ث) ---
             tl.add(() => {
