@@ -165,7 +165,7 @@
                 <i class="fa-solid fa-check-circle ml-2"></i> الإصدار النهائي المعتمد 9.0
             </span>
             <h1 class="text-5xl md:text-6xl font-black mb-6 leading-tight">
-                البوابة الموحدة والنظام الوسيط <br>
+                البوابة الموحدة ونظام التحقق الوسيط <br>
                 <span class="text-transparent bg-clip-text bg-gradient-to-r from-neon-blue to-cyan-200">لتأمين وإدارة البطاقات</span>
             </h1>
             <p class="text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
@@ -201,9 +201,9 @@
             </div>
 
             <!-- Architecture Diagram Container -->
-            <div class="relative bg-[#0F1623] border border-border-light rounded-t-3xl p-4 min-h-[750px] shadow-2xl overflow-x-auto">
+            <div class="relative bg-[#0F1623] border border-border-light rounded-t-3xl p-4 min-h-[850px] shadow-2xl overflow-x-auto">
                 
-                <div class="min-w-[900px] h-[700px] relative">
+                <div class="min-w-[900px] h-[800px] relative">
                     
                     <!-- SVG Layer for Connecting Lines -->
                     <svg class="absolute inset-0 w-full h-full pointer-events-none z-0" xmlns="http://www.w3.org/2000/svg">
@@ -219,25 +219,31 @@
                             </marker>
                         </defs>
 
-                        <!-- UPDATED: Security Flow Lines (Blue) - Starts from BFF (Left/Last in RTL) -->
-                        <!-- Note: Coordinates swapped to match visual layout: BFF Left (180), POS Right (820) -->
-                        <!-- BFF (Left) to Gateway -->
-                        <path id="path-sec-1" class="flow-line text-neon-blue" d="M180 580 L180 420 L450 420" stroke="currentColor" stroke-width="2" fill="none" marker-end="url(#arrow-blue)" />
-                        <!-- Gateway to Intermediary (Left) -->
+                        <!-- UPDATED: Security Flow Lines (Blue) - Starts from BFF (Right) -->
+                        <!-- BFF (Right) to Gateway (Center) -->
+                        <!-- Start: ~820 (BFF x center), End: ~550 (Gateway right-ish) -->
+                        <path id="path-sec-1" class="flow-line text-neon-blue" d="M820 580 L820 450 L550 450" stroke="currentColor" stroke-width="2" fill="none" marker-end="url(#arrow-blue)" />
+                        <!-- Gateway (Center) to Intermediary (Left) -->
+                        <!-- Start: ~450 (Gateway left-ish), End: ~250 (Intermediary bottom/right) -->
                         <path id="path-sec-2" class="flow-line text-neon-blue" d="M450 350 L250 250" stroke="currentColor" stroke-width="2" fill="none" marker-end="url(#arrow-blue)" />
-                        <!-- Intermediary to Core -->
+                        <!-- Intermediary (Left) to Core (Top Center) -->
                         <path id="path-sec-3" class="flow-line text-neon-blue" d="M250 180 L450 120" stroke="currentColor" stroke-width="2" fill="none" marker-end="url(#arrow-blue)" />
 
                         <!-- Financial Flow Lines (Green) -->
-                        <!-- Payment Platform to Gateway -->
+                        <!-- Bank App to Payment Platform -->
+                        <path id="path-fin-src-1" class="flow-line text-neon-green" d="M420 700 L500 640" stroke="currentColor" stroke-width="2" fill="none" marker-end="url(#arrow-green)" />
+                        <!-- Unified Provider to Payment Platform -->
+                        <path id="path-fin-src-2" class="flow-line text-neon-green" d="M580 700 L500 640" stroke="currentColor" stroke-width="2" fill="none" marker-end="url(#arrow-green)" />
+                        <!-- Payment Platform (Center) to Gateway (Center) -->
                         <path id="path-fin-1" class="flow-line text-neon-green" d="M500 580 L500 450" stroke="currentColor" stroke-width="2" fill="none" marker-end="url(#arrow-green)" />
-                        <!-- Gateway to Core -->
+                        <!-- Gateway (Center) to Core (Top Center) -->
                         <path id="path-fin-2" class="flow-line text-neon-green" d="M500 350 L500 130" stroke="currentColor" stroke-width="2" fill="none" marker-end="url(#arrow-green)" />
 
-                        <!-- UPDATED: Operational Flow Lines (Gold) - Starts from POS (Right/First in RTL) -->
-                        <!-- POS (Right) to Gateway -->
-                        <path id="path-ops-1" class="flow-line text-neon-gold" d="M820 580 L820 420 L550 420" stroke="currentColor" stroke-width="2" fill="none" marker-end="url(#arrow-gold)" />
-                        <!-- Gateway to Core (Direct) -->
+                        <!-- UPDATED: Operational Flow Lines (Gold) - Starts from POS (Left) -->
+                        <!-- POS (Left) to Gateway (Center) -->
+                        <!-- Start: ~180 (POS x center), End: ~450 (Gateway left-ish) -->
+                        <path id="path-ops-1" class="flow-line text-neon-gold" d="M180 580 L180 450 L450 450" stroke="currentColor" stroke-width="2" fill="none" marker-end="url(#arrow-gold)" />
+                        <!-- Gateway (Center) to Core (Top Center) -->
                         <path id="path-ops-2" class="flow-line text-neon-gold" d="M550 350 L550 240 L550 130" stroke="currentColor" stroke-width="2" fill="none" marker-end="url(#arrow-gold)" />
                     </svg>
 
@@ -250,13 +256,13 @@
                         </div>
                     </div>
 
-                    <!-- Row 2: Intermediary System (Left Side) -->
+                    <!-- Row 2: Verification Intermediary (Left Side) -->
                     <div class="absolute top-[25%] left-[10%] w-[220px]">
                         <div id="sec-system" class="system-box bg-tech-card/60 py-5 rounded-xl border-l-4 border-l-neon-blue text-center opacity-50 transition-all duration-500">
                             <div class="absolute -top-3 right-3 bg-neon-blue text-tech-dark text-[10px] font-bold px-2 py-0.5 rounded">Secure Zone</div>
                             <i class="fa-solid fa-user-lock text-3xl mb-2 text-neon-blue"></i>
-                            <h3 class="font-bold text-lg">النظام الوسيط</h3>
-                            <p class="text-xs text-gray-400">Security Intermediary</p>
+                            <h3 class="font-bold text-lg">نظام التحقق الوسيط</h3>
+                            <p class="text-xs text-gray-400">Verification Intermediary</p>
                             <div class="mt-2 text-[10px] bg-tech-dark/50 inline-block px-2 py-1 rounded text-neon-blue">
                                 فحص CVV • الحماية الذكية
                             </div>
@@ -284,27 +290,48 @@
                     </div>
 
                     <!-- Row 4: Sources / Entry Points (SWAPPED POS and BFF) -->
-                    <div class="absolute bottom-[5%] w-full flex justify-between px-16">
+                    <div class="absolute bottom-[20%] w-full flex justify-between px-16">
                         
-                        <!-- POS (Right Side in Visual) -->
-                        <div id="pos-layer" class="system-box bg-tech-card w-[200px] py-4 rounded-xl border-t-4 border-t-neon-gold text-center opacity-50 transition-all duration-500">
-                            <i class="fa-solid fa-cash-register text-2xl mb-2 text-gray-300"></i>
-                            <h4 class="font-bold">نقاط البيع (POS)</h4>
-                            <p class="text-xs text-gray-500 mt-1">الأجهزة الطرفية</p>
+                        <!-- BFF (Right) -->
+                        <!-- In RTL: first element is Right. -->
+                        <div id="bff-layer" class="system-box bg-tech-card w-[200px] py-4 rounded-xl border-t-4 border-t-neon-blue text-center opacity-50 transition-all duration-500">
+                            <i class="fa-solid fa-mobile-button text-2xl mb-2 text-gray-300"></i>
+                            <h4 class="font-bold">قنوات العملاء (BFF)</h4>
+                            <p class="text-xs text-gray-500 mt-1">تطبيق الموبايل / الويب</p>
                         </div>
 
                         <!-- Payment Platform (Center) -->
                         <div id="pay-layer" class="system-box bg-tech-card w-[200px] py-4 rounded-xl border-t-4 border-t-neon-green text-center opacity-50 transition-all duration-500">
                             <i class="fa-solid fa-money-bill-transfer text-2xl mb-2 text-gray-300"></i>
                             <h4 class="font-bold">منصة المدفوعات</h4>
-                            <p class="text-xs text-gray-500 mt-1">بنوك / سداد / مزودين</p>
+                            <p class="text-xs text-gray-500 mt-1">بوابة تجميع العمليات</p>
                         </div>
 
-                        <!-- BFF (Left Side in Visual) -->
-                        <div id="bff-layer" class="system-box bg-tech-card w-[200px] py-4 rounded-xl border-t-4 border-t-neon-blue text-center opacity-50 transition-all duration-500">
-                            <i class="fa-solid fa-mobile-button text-2xl mb-2 text-gray-300"></i>
-                            <h4 class="font-bold">قنوات العملاء (BFF)</h4>
-                            <p class="text-xs text-gray-500 mt-1">تطبيق الموبايل / الويب</p>
+                        <!-- POS (Left) -->
+                        <!-- In RTL: last element is Left. -->
+                        <div id="pos-layer" class="system-box bg-tech-card w-[200px] py-4 rounded-xl border-t-4 border-t-neon-gold text-center opacity-50 transition-all duration-500">
+                            <i class="fa-solid fa-cash-register text-2xl mb-2 text-gray-300"></i>
+                            <h4 class="font-bold">نقاط البيع (POS)</h4>
+                            <p class="text-xs text-gray-500 mt-1">الأجهزة الطرفية</p>
+                        </div>
+
+                    </div>
+
+                    <!-- Row 5: Financial Sources (Feeding Payment Platform) -->
+                    <div class="absolute bottom-[2%] left-1/2 transform -translate-x-1/2 flex gap-8 w-[400px] justify-center">
+                        
+                        <!-- Bank App -->
+                        <div id="bank-app" class="system-box bg-tech-card/30 w-[140px] py-3 rounded-lg border-t-2 border-t-neon-green text-center opacity-30 transition-all duration-500 scale-90">
+                            <i class="fa-solid fa-building-columns text-lg mb-1 text-gray-400"></i>
+                            <h5 class="font-bold text-sm">التطبيق البنكي</h5>
+                            <p class="text-[9px] text-gray-500">داخلي</p>
+                        </div>
+
+                        <!-- Unified Provider -->
+                        <div id="uni-provider" class="system-box bg-tech-card/30 w-[140px] py-3 rounded-lg border-t-2 border-t-neon-green text-center opacity-30 transition-all duration-500 scale-90">
+                            <i class="fa-solid fa-globe text-lg mb-1 text-gray-400"></i>
+                            <h5 class="font-bold text-sm">المزود الموحد</h5>
+                            <p class="text-[9px] text-gray-500">قنوات خارجية</p>
                         </div>
 
                     </div>
@@ -324,7 +351,7 @@
         </div>
     </section>
 
-    <!-- Gap Analysis Section (NEW) -->
+    <!-- Gap Analysis Section -->
     <section id="gap-analysis" class="py-16 bg-tech-card/20">
         <div class="max-w-7xl mx-auto px-4">
             <h2 class="text-3xl font-bold mb-10 text-center">تحليل الفجوة: الوضع الراهن مقابل المستهدف</h2>
@@ -348,7 +375,7 @@
                         <div class="bg-tech-dark/80 p-3 rounded border border-neon-blue/30">
                             <span class="text-xs text-green-400 block mb-1">الوضع المستهدف (To-Be)</span>
                             <strong class="text-white">متوفرة ومتكاملة</strong><br>
-                            مسار آمن (تطبيق -> BFF -> بوابة -> وسيط).
+                            مسار آمن (تطبيق -> BFF -> بوابة -> نظام التحقق).
                         </div>
                     </div>
                     
@@ -517,11 +544,16 @@
             document.querySelectorAll('.flow-line').forEach(el => el.classList.remove('active'));
             
             // Reset Opacity & Styles for Boxes
-            const boxes = ['sec-system', 'bff-layer', 'pay-layer', 'pos-layer'];
+            const boxes = ['sec-system', 'bff-layer', 'pay-layer', 'pos-layer', 'bank-app', 'uni-provider'];
             boxes.forEach(id => {
                 const el = document.getElementById(id);
                 el.classList.add('opacity-50');
-                el.classList.remove('scale-105', 'border-white', 'shadow-lg');
+                if(id === 'bank-app' || id === 'uni-provider') {
+                    el.classList.add('opacity-30', 'scale-90'); // specific for smaller boxes
+                    el.classList.remove('scale-100', 'bg-tech-card/80');
+                } else {
+                    el.classList.remove('scale-105', 'border-white', 'shadow-lg');
+                }
             });
 
             // Reset Buttons
@@ -563,7 +595,7 @@
                         </div>
                         <i class="fa-solid fa-arrow-down text-neon-blue/50"></i>
                         <div class="bg-tech-card/50 px-4 py-2 rounded-lg border border-neon-blue/20 w-full max-w-2xl">
-                            2. <strong>البوابة الموحدة</strong> توجه الطلب الحساس إلى <strong>النظام الوسيط</strong>.
+                            2. <strong>البوابة الموحدة</strong> توجه الطلب الحساس إلى <strong>نظام التحقق الوسيط</strong>.
                         </div>
                         <i class="fa-solid fa-arrow-down text-neon-blue/50"></i>
                         <div class="bg-tech-card/50 px-4 py-2 rounded-lg border border-neon-blue/20 w-full max-w-2xl">
@@ -577,11 +609,22 @@
                 document.getElementById('btn-financial').classList.add('active');
 
                 // Activate Paths
-                document.getElementById('path-fin-1').classList.add('active');
-                setTimeout(() => document.getElementById('path-fin-2').classList.add('active'), 400);
+                document.getElementById('path-fin-src-1').classList.add('active');
+                document.getElementById('path-fin-src-2').classList.add('active');
+                setTimeout(() => document.getElementById('path-fin-1').classList.add('active'), 400);
+                setTimeout(() => document.getElementById('path-fin-2').classList.add('active'), 800);
 
                 // Highlight Components
                 const payPlat = document.getElementById('pay-layer');
+                const bankApp = document.getElementById('bank-app');
+                const uniProv = document.getElementById('uni-provider');
+
+                bankApp.classList.remove('opacity-30', 'scale-90');
+                bankApp.classList.add('opacity-100', 'scale-100', 'bg-tech-card/80');
+
+                uniProv.classList.remove('opacity-30', 'scale-90');
+                uniProv.classList.add('opacity-100', 'scale-100', 'bg-tech-card/80');
+
                 payPlat.classList.remove('opacity-50');
                 payPlat.classList.add('scale-105', 'shadow-lg');
 
@@ -592,11 +635,11 @@
                 expText.innerHTML = `
                     <div class="flex flex-col items-center gap-2">
                         <div class="bg-tech-card/50 px-4 py-2 rounded-lg border border-neon-green/20 w-full max-w-2xl">
-                            1. <strong>منصة المدفوعات</strong> تستقبل وتوحد طلبات الشحن من البنوك وسداد.
+                            1. يأتي الطلب من (التطبيق البنكي / المزود الموحد) إلى <strong>منصة المدفوعات</strong>.
                         </div>
                         <i class="fa-solid fa-arrow-down text-neon-green/50"></i>
                         <div class="bg-tech-card/50 px-4 py-2 rounded-lg border border-neon-green/20 w-full max-w-2xl">
-                            2. يتم التأكد من صحة رقم البطاقة (Check Digit).
+                            2. المنصة توحد الطلب وتتحقق من صحة الرقم (Check Digit) ثم ترسله للبوابة.
                         </div>
                         <i class="fa-solid fa-arrow-down text-neon-green/50"></i>
                         <div class="bg-tech-card/50 px-4 py-2 rounded-lg border border-neon-green/20 w-full max-w-2xl">
