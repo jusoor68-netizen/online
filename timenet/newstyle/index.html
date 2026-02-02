@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TimeNet - تسجيل الدخول</title>
+    <meta name="theme-color" content="#6457C6">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="glass-container">
+        <!-- Logo Section -->
+        <div class="logo-section">
+            <div class="logo-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
+                    <path d="M1.42 9a16 16 0 0 1 21.16 0"></path>
+                    <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+                    <circle cx="12" cy="20" r="1"></circle>
+                </svg>
+            </div>
+            <h1>TimeNet</h1>
+            <p class="subtitle">شبكة تايم نت - استمتع بسرعة المدينة</p>
+        </div>
+
+        <!-- Error Alert (MikroTik) -->
+        $(if error)
+        <div class="alert-error">
+            $(error)
+        </div>
+        $(endif)
+
+        <!-- Login Form -->
+        <form name="login" action="$(link-login-only)" method="post" onsubmit="return doLogin()">
+            <input type="hidden" name="dst" value="$(link-orig)">
+            <input type="hidden" name="popup" value="true">
+            <input type="hidden" name="password">
+
+            <div class="input-group">
+                <label for="username">اسم المستخدم / رقم الكرت</label>
+                <input type="text" id="username" name="username" class="glass-input" placeholder="أدخل رمز الكرت"
+                    required autocomplete="off">
+            </div>
+
+            <div class="input-group">
+                <label for="speed">اختر السرعة المطلوبة</label>
+                <select id="speed" name="speed" class="glass-select">
+                    <option value="55987b0d-ca6d-464f-93c8-db9ac4a08000">سرعة اقتصادية</option>
+                    <option value="55987b0d-ca6d-464f-93c8-db9ac4a08111" selected>سرعة افتراضية</option>
+                    <option value="55987b0d-ca6d-464f-93c8-db9ac4a08222">سرعة متوسطة</option>
+                    <option value="55987b0d-ca6d-464f-93c8-db9ac4a08333">سرعة عالية</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn-gradient">اتصال الآن</button>
+        </form>
+
+        <!-- Pricing Section -->
+        <div class="pricing-section">
+            <div class="pricing-title">باقات الأسعار</div>
+            <div class="pricing-grid">
+                <div class="price-card">
+                    <div class="price-duration">3 ساعات</div>
+                    <div class="price-amount">100 ريال</div>
+                </div>
+                <div class="price-card">
+                    <div class="price-duration">24 ساعة</div>
+                    <div class="price-amount">200 ريال</div>
+                </div>
+                <div class="price-card">
+                    <div class="price-duration">7 أيام</div>
+                    <div class="price-amount">500 ريال</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer-info">
+            خدمة العملاء: 777019176
+        </div>
+    </div>
+
+    <!-- Login Script for MikroTik -->
+    <script>
+        function doLogin() {
+            var form = document.login;
+            var username = form.username.value.trim().toLowerCase();
+
+            // For voucher systems, password = username
+            form.password.value = username;
+
+            return true;
+        }
+    </script>
+
+</body>
+
+</html>
