@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TimeNet - حالة المستخدم</title>
+    <meta name="theme-color" content="#0f172a">
+    <link rel="stylesheet" href="style.css">
+    <meta http-equiv="refresh" content="$(refresh-timeout-secs)">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+</head>
+</head>
+
+<body>
+
+    <div class="main-card">
+        <div class="light-ray"></div>
+
+        <!-- Header -->
+        <h1 class="header-title">حالة المستخدم</h1>
+
+        <!-- Stats Circles -->
+        <div class="stats-row">
+            <!-- Left: Time (Purple) -->
+            <div class="stat-item">
+                <div class="stat-ring-container">
+                    <svg class="stat-ring-svg">
+                        <defs>
+                            <linearGradient id="purpleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" class="grad-purple-stop1" />
+                                <stop offset="100%" class="grad-purple-stop2" />
+                            </linearGradient>
+                        </defs>
+                        <circle class="stat-ring-bg" cx="70" cy="70" r="60"></circle>
+                        <circle class="stat-ring-progress" cx="70" cy="70" r="60" stroke="url(#purpleGrad)"
+                            id="time-ring"></circle>
+                    </svg>
+                    <div class="stat-content">
+                        <div class="stat-label">الوقت المتبقي</div>
+                        <div class="stat-value" id="time-display">--:--</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Data (Blue) -->
+            <div class="stat-item">
+                <div class="stat-ring-container">
+                    <svg class="stat-ring-svg">
+                        <defs>
+                            <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" class="grad-blue-stop1" />
+                                <stop offset="100%" class="grad-blue-stop2" />
+                            </linearGradient>
+                        </defs>
+                        <circle class="stat-ring-bg" cx="70" cy="70" r="60"></circle>
+                        <circle class="stat-ring-progress" cx="70" cy="70" r="60" stroke="url(#blueGrad)"
+                            id="data-ring"></circle>
+                    </svg>
+                    <div class="stat-content">
+                        <div class="stat-label">البيانات المتبقية</div>
+                        <div class="stat-value" id="data-display">-- GB</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logout Button (Pill Shape) -->
+        <div class="logout-container">
+            <!-- Form wrapper for MikroTik compatibility -->
+            <form action="$(link-logout)" name="logout" onsubmit="return confirm('هل تريد تسجيل الخروج؟')">
+                <button type="submit" class="btn-logout-pill">
+                    <svg class="power-icon" viewBox="0 0 24 24">
+                        <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
+                        <line x1="12" y1="2" x2="12" y2="12"></line>
+                    </svg>
+                    <span>تسجيل الخروج</span>
+                </button>
+            </form>
+        </div>
+
+        <!-- Hub Cards -->
+        <div class="hub-section">
+            <h2 class="section-header">مركز الترفيه</h2>
+            <div class="hub-grid">
+                <!-- TV Card: Monitor with Play and Glint -->
+                <a href="tv.html" class="hub-card tv">
+                    <svg class="icon-svg tv-icon" viewBox="0 0 24 24">
+                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2" stroke-width="2"></rect>
+                        <path d="M8 21h8" stroke-width="2" stroke-linecap="round"></path>
+                        <path d="M12 17v4" stroke-width="2" stroke-linecap="round"></path>
+                        <!-- Play Triangle -->
+                        <path d="M10 8l5 3l-5 3v-6z" fill="currentColor" opacity="0.8"></path>
+                    </svg>
+                    <span class="hub-title">بث مباشر</span>
+                </a>
+
+                <!-- Media Card: Popcorn and Vertical Strip -->
+                <a href="media.html" class="hub-card media">
+                    <svg class="icon-svg media-icon" viewBox="0 0 24 24">
+                        <!-- Popcorn Bucket -->
+                        <path d="M6 9l1.5 11h9l1.5 -11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        </path>
+                        <path
+                            d="M6 9c0 -1.5 1 -2 2 -2c1 0 1.5 1 2.5 1c1 0 1.5 -1 2.5 -1c1 0 1.5 1 2.5 1c1 0 1.5 -1 2.5 -1c1 0 2 0.5 2 2"
+                            stroke-width="1.5"></path>
+                        <!-- Popcorn Kernels (Clouds) -->
+                        <circle cx="9" cy="5" r="1.5" fill="currentColor" opacity="0.6"></circle>
+                        <circle cx="12" cy="4" r="1.5" fill="currentColor" opacity="0.6"></circle>
+                        <circle cx="15" cy="5" r="1.5" fill="currentColor" opacity="0.6"></circle>
+                        <!-- Film Strip Hint -->
+                        <rect x="19" y="4" width="3" height="16" rx="1" opacity="0.5" stroke-width="1.5"></rect>
+                    </svg>
+                    <span class="hub-title">مركز الوسائط</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- 3D Transporting Carousel -->
+        <div class="slider-section-3d">
+            <h2 class="section-header">رحلة في عالم الترفيه</h2>
+            <div class="scene-3d">
+                <div class="carousel-3d">
+                    <div class="carousel-cell" style="--bg-img: url('https://picsum.photos/300/450?random=1')">
+                        <div class="cell-content">
+                            <span class="cell-category">أكشن</span>
+                            <h3 class="cell-title">المهمة المستحيلة</h3>
+                        </div>
+                    </div>
+                    <div class="carousel-cell" style="--bg-img: url('https://picsum.photos/300/450?random=2')">
+                        <div class="cell-content">
+                            <span class="cell-category">خيال علمي</span>
+                            <h3 class="cell-title">عالم الغد</h3>
+                        </div>
+                    </div>
+                    <div class="carousel-cell" style="--bg-img: url('https://picsum.photos/300/450?random=3')">
+                        <div class="cell-content">
+                            <span class="cell-category">دراما</span>
+                            <h3 class="cell-title">اللحن الأخير</h3>
+                        </div>
+                    </div>
+                    <div class="carousel-cell" style="--bg-img: url('https://picsum.photos/300/450?random=4')">
+                        <div class="cell-content">
+                            <span class="cell-category">رياضة</span>
+                            <h3 class="cell-title">الدوري الذهبي</h3>
+                        </div>
+                    </div>
+                    <div class="carousel-cell" style="--bg-img: url('https://picsum.photos/300/450?random=5')">
+                        <div class="cell-content">
+                            <span class="cell-category">وثائقي</span>
+                            <h3 class="cell-title">أسرار الطبيعة</h3>
+                        </div>
+                    </div>
+                    <div class="carousel-cell" style="--bg-img: url('https://picsum.photos/300/450?random=6')">
+                        <div class="cell-content">
+                            <span class="cell-category">رعب</span>
+                            <h3 class="cell-title">الظلام الدامس</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-controls">
+                <button class="control-btn prev">❮</button>
+                <button class="control-btn next">❯</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Update logic
+        document.addEventListener('DOMContentLoaded', function () {
+            // Mock Values incase of no MikroTik
+            const timeVal = "$(session-time-left)";
+            const byteVal = "$(remain-bytes-total)";
+
+            const displayTime = timeVal.startsWith("$") ? "02:45:30" : timeVal;
+            const displayBytes = byteVal.startsWith("$") ? "5.2 GB" : byteVal;
+
+            document.getElementById('time-display').innerText = displayTime;
+            document.getElementById('data-display').innerText = displayBytes;
+
+            // Set Progress (Static for design match)
+            document.getElementById('time-ring').style.strokeDashoffset = 70; // ~80%
+            document.getElementById('data-ring').style.strokeDashoffset = 120; // ~70%
+
+            // --- 3D Carousel Logic ---
+            const carousel = document.querySelector('.carousel-3d');
+            const cells = carousel.querySelectorAll('.carousel-cell');
+            const cellCount = cells.length;
+            const prevBtn = document.querySelector('.control-btn.prev');
+            const nextBtn = document.querySelector('.control-btn.next');
+
+            let selectedIndex = 0;
+            let radius, theta;
+
+            function rotateCarousel() {
+                const angle = theta * selectedIndex * -1;
+                carousel.style.transform = 'translateZ(' + -radius + 'px) rotateY(' + angle + 'deg)';
+            }
+
+            function setupCarousel() {
+                // Responsive Cell Width matching CSS
+                const isMobile = window.innerWidth <= 480;
+                const cellWidth = isMobile ? 140 : 210;
+
+                theta = 360 / cellCount;
+                radius = Math.round((cellWidth / 2) / Math.tan(Math.PI / cellCount));
+
+                // Position cells
+                cells.forEach((cell, i) => {
+                    const cellAngle = theta * i;
+                    cell.style.transform = 'rotateY(' + cellAngle + 'deg) translateZ(' + radius + 'px)';
+                });
+
+                rotateCarousel();
+            }
+
+            prevBtn.addEventListener('click', () => {
+                selectedIndex--;
+                rotateCarousel();
+            });
+
+            nextBtn.addEventListener('click', () => {
+                selectedIndex++;
+                rotateCarousel();
+            });
+
+            window.addEventListener('resize', setupCarousel);
+
+            // Initialize
+            setupCarousel();
+        });
+    </script>
+</body>
+
+</html>
