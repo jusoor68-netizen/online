@@ -294,6 +294,7 @@ h1,
     transform: rotate(-90deg);
     width: 100%;
     height: 100%;
+    overflow: visible;
 }
 
 .stat-ring-bg {
@@ -591,12 +592,23 @@ h1,
 
     /* Stats Adjustments */
     .stats-row {
-        gap: 10px;
+        gap: 15px;
+        justify-content: space-around;
+        width: 100%;
     }
 
     .stat-ring-container {
         width: 120px;
         height: 120px;
+    }
+
+    .stat-value {
+        font-size: 1.25rem;
+    }
+
+    .stat-label {
+        font-size: 0.75rem;
+        margin-bottom: 2px;
     }
 }
 
