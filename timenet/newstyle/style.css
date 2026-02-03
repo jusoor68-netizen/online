@@ -399,7 +399,7 @@ h1,
 /* 3D Carousel (Unified) */
 .slider-section-3d {
     margin-top: 25px;
-    perspective: 1200px;
+    perspective: 4000px;
     position: relative;
     padding-bottom: 40px;
     direction: ltr;
@@ -407,10 +407,10 @@ h1,
 }
 
 .scene-3d {
-    width: 200px;
+    width: 500px;
     height: 300px;
     margin: 40px auto;
-    perspective: 1000px;
+    perspective: 5000px;
     position: relative;
 }
 
@@ -427,7 +427,7 @@ h1,
     position: absolute;
     width: 190px;
     height: 280px;
-    left: 10px;
+    left: 155px;
     top: 10px;
     border-radius: 20px;
     background-image: var(--bg-img);
@@ -501,6 +501,11 @@ h1,
     transform: scale(1.1);
 }
 
+/* Make front cells pop slightly more */
+.carousel-cell {
+    transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
 /* Alert Error */
 .alert-error {
     background: rgba(239, 68, 68, 0.15);
@@ -571,12 +576,12 @@ h1,
 
     /* 3D Slider Adjustments */
     .slider-section-3d {
-        perspective: 800px;
+        perspective: 3000px;
         overflow: hidden;
     }
 
     .scene-3d {
-        width: 140px;
+        width: 320px;
         height: 220px;
         margin: 20px auto;
     }
@@ -584,6 +589,7 @@ h1,
     .carousel-cell {
         width: 130px;
         height: 200px;
+        left: 95px;
     }
 
     .carousel-3d {
