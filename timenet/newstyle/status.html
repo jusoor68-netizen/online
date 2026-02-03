@@ -195,18 +195,35 @@
             let selectedIndex = 0;
             let radius, theta;
 
+            let autoPlayTimer;
+
             function rotateCarousel() {
-                const angle = theta * selectedIndex * -1;
+                // Offset rotation by half theta to show 2 items in front
+                const angle = (theta * selectedIndex + (theta / 2)) * -1;
                 carousel.style.transform = 'translateZ(' + -radius + 'px) rotateY(' + angle + 'deg)';
+            }
+
+            function startAutoPlay() {
+                stopAutoPlay();
+                autoPlayTimer = setInterval(() => {
+                    selectedIndex++;
+                    rotateCarousel();
+                }, 2000); // 2 seconds auto-change
+            }
+
+            function stopAutoPlay() {
+                if (autoPlayTimer) clearInterval(autoPlayTimer);
             }
 
             function setupCarousel() {
                 // Responsive Cell Width matching CSS
                 const isMobile = window.innerWidth <= 480;
-                const cellWidth = isMobile ? 140 : 210;
+                const cellWidth = isMobile ? 130 : 190;
+                const gap = isMobile ? 40 : 100; // Increased gap for flatter arc
 
                 theta = 360 / cellCount;
-                radius = Math.round((cellWidth / 2) / Math.tan(Math.PI / cellCount));
+                // Higher radius = flatter curve
+                radius = Math.round(((cellWidth + gap) / 2) / Math.tan(Math.PI / cellCount));
 
                 // Position cells
                 cells.forEach((cell, i) => {
@@ -215,16 +232,21 @@
                 });
 
                 rotateCarousel();
+                startAutoPlay();
             }
 
             prevBtn.addEventListener('click', () => {
+                stopAutoPlay();
                 selectedIndex--;
                 rotateCarousel();
+                // Optionally restart after delay
             });
 
             nextBtn.addEventListener('click', () => {
+                stopAutoPlay();
                 selectedIndex++;
                 rotateCarousel();
+                // Optionally restart after delay
             });
 
             window.addEventListener('resize', setupCarousel);
