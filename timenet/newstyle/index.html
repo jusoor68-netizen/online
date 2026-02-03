@@ -26,6 +26,20 @@
             <p class="subtitle">شبكة تايم نت - استمتع بسرعة المدينة</p>
         </div>
 
+        <!-- 3D Transporting Carousel -->
+        <div class="slider-section-3d login-slider">
+            <div class="scene-3d">
+                <div class="carousel-3d">
+                    <div class="carousel-cell" style="--bg-img: url('https://picsum.photos/300/450?random=11')"></div>
+                    <div class="carousel-cell" style="--bg-img: url('https://picsum.photos/300/450?random=12')"></div>
+                    <div class="carousel-cell" style="--bg-img: url('https://picsum.photos/300/450?random=13')"></div>
+                    <div class="carousel-cell" style="--bg-img: url('https://picsum.photos/300/450?random=14')"></div>
+                    <div class="carousel-cell" style="--bg-img: url('https://picsum.photos/300/450?random=15')"></div>
+                    <div class="carousel-cell" style="--bg-img: url('https://picsum.photos/300/450?random=16')"></div>
+                </div>
+            </div>
+        </div>
+
         <!-- Error Alert (MikroTik) -->
         $(if error)
         <div class="alert-error">
@@ -88,12 +102,52 @@
         function doLogin() {
             var form = document.login;
             var username = form.username.value.trim().toLowerCase();
-
-            // For voucher systems, password = username
             form.password.value = username;
-
             return true;
         }
+
+        // --- 3D Carousel Logic (Synced with Status Page) ---
+        document.addEventListener('DOMContentLoaded', function () {
+            const carousel = document.querySelector('.carousel-3d');
+            const cells = carousel.querySelectorAll('.carousel-cell');
+            const cellCount = cells.length;
+
+            let selectedIndex = 0;
+            let radius, theta;
+            let autoPlayTimer;
+
+            function rotateCarousel() {
+                const angle = (theta * selectedIndex + (theta / 2)) * -1;
+                carousel.style.transform = 'translateZ(' + -radius + 'px) rotateY(' + angle + 'deg)';
+            }
+
+            function startAutoPlay() {
+                autoPlayTimer = setInterval(() => {
+                    selectedIndex++;
+                    rotateCarousel();
+                }, 2000);
+            }
+
+            function setupCarousel() {
+                const isMobile = window.innerWidth <= 480;
+                const cellWidth = isMobile ? 130 : 190;
+                const gap = isMobile ? 40 : 100;
+
+                theta = 360 / cellCount;
+                radius = Math.round(((cellWidth + gap) / 2) / Math.tan(Math.PI / cellCount));
+
+                cells.forEach((cell, i) => {
+                    const cellAngle = theta * i;
+                    cell.style.transform = 'rotateY(' + cellAngle + 'deg) translateZ(' + radius + 'px)';
+                });
+
+                rotateCarousel();
+                startAutoPlay();
+            }
+
+            window.addEventListener('resize', setupCarousel);
+            setupCarousel();
+        });
     </script>
 
 </body>
