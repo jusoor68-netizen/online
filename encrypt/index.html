@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Offline AES-128 Encrypt (PHP openssl_encrypt compat)</title>
+  <style>
+    :root { --pad: 12px; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 24px; max-width: 980px; }
+    h1 { font-size: 20px; margin: 0 0 14px; }
+    label { display: block; font-weight: 600; margin: 10px 0 6px; }
+    textarea, input { width: 100%; padding: var(--pad); border: 1px solid #cfd5dd; border-radius: 10px; box-sizing: border-box; }
+    textarea { min-height: 92px; resize: vertical; }
+    .grid { display: grid; gap: 14px; grid-template-columns: 1fr; }
+    @media (min-width: 880px) { .grid { grid-template-columns: 1fr 1fr; } }
+    .row { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0; }
+    button { padding: 10px 14px; border: 0; border-radius: 10px; cursor: pointer; font-weight: 700; }
+    button.primary { background: #111827; color: #fff; }
+    button.secondary { background: #eef2f7; color: #111827; }
+    .hint { font-size: 13px; color: #4b5563; line-height: 1.45; }
+    .pill { display: inline-block; font-size: 12px; padding: 3px 8px; border-radius: 999px; background: #f3f4f6; color: #111827; margin-left: 6px; }
+    .ok { color: #065f46; }
+    .bad { color: #991b1b; }
+    code { background: #f3f4f6; padding: 2px 6px; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <h1>
+    Offline Encrypt — <code>urlencode(base64(openssl_encrypt(..., OPENSSL_RAW_DATA)))</code>
+    <span class="pill">AES-128-CBC</span>
+  </h1>
+
+  <p class="hint">
+    This page runs fully offline, but WebCrypto requires a <b>secure context</b>.
+    Use <code>http://localhost</code> (e.g., <code>python -m http.server 8080</code>) or HTTPS.
+  </p>
+
+  <label for="data">Data (plain text)</label>
+  <textarea id="data">{
+  "time": "",
+  "username": "",
+  "password": "",
+  "type": "getCards",
+  "catId": "37"
+}</textarea>
+
+  <div class="grid">
+    <div>
+      <label for="key">Key <span class="pill">16 bytes</span></label>
+      <input id="key" value="1234567812345678" />
+      <div class="hint">Accepts: <b>16-char text</b> OR <b>32 hex chars</b>. Longer will be truncated; shorter will be zero-padded.</div>
+    </div>
+    <div>
+      <label for="iv">IV <span class="pill">16 bytes</span></label>
+      <input id="iv" value="1234567812345678" />
+      <div class="hint">Same rule as key. For AES-CBC the IV must be 16 bytes.</div>
+    </div>
+  </div>
+
+  <div class="row">
+    <button class="primary" id="encryptBtn">Encrypt</button>
+    <button class="secondary" id="copyBtn">Copy output</button>
+    <button class="secondary" id="tsBtn">Get timestamp</button>
+    <button class="secondary" id="clearBtn">Clear</button>
+  </div>
+
+  <label for="out">Output (URL-encoded Base64 ciphertext)</label>
+  <textarea id="out" readonly></textarea>
+
+  <div id="status" class="hint"></div>
+
+  <script>
+    // --- Utilities ---
+    const te = new TextEncoder();
+
+    function setStatus(msg, ok = true) {
+      const el = document.getElementById('status');
+      el.textContent = msg;
+      el.className = 'hint ' + (ok ? 'ok' : 'bad');
+    }
+
+    function hexToBytes(hex) {
+      if (hex.length % 2 !== 0) throw new Error('Invalid hex length');
+      const out = new Uint8Array(hex.length / 2);
+      for (let i = 0; i < out.length; i++) out[i] = parseInt(hex.slice(i * 2, i * 2 + 2), 16);
+      return out;
+    }
+
+    function to16Bytes(input) {
+      const s = (input ?? '').trim();
+      let bytes;
+
+      // If exactly 32 hex chars => 16 bytes
+      if (/^[0-9a-fA-F]{32}$/.test(s)) {
+        bytes = hexToBytes(s);
+      } else {
+        bytes = te.encode(s); // UTF-8
+      }
+
+      // Truncate or zero-pad to 16
+      const out = new Uint8Array(16);
+      out.set(bytes.subarray(0, 16));
+      return out;
+    }
+
+    function bytesToBase64(bytes) {
+      // Convert Uint8Array to binary string safely in chunks
+      let binary = '';
+      const chunkSize = 0x8000;
+      for (let i = 0; i < bytes.length; i += chunkSize) {
+        const chunk = bytes.subarray(i, i + chunkSize);
+        binary += String.fromCharCode(...chunk);
+      }
+      return btoa(binary);
+    }
+
+    // --- Core: PHP-compatible output ---
+    // PHP: urlencode(base64_encode(openssl_encrypt($data, 'aes128', $key, OPENSSL_RAW_DATA, $iv)))
+    // Here: encodeURIComponent(btoa(cipherBytes)) with AES-128-CBC
+    async function encrypt_request_js(data, keyStr, ivStr) {
+      if (!globalThis.crypto?.subtle) {
+        throw new Error('WebCrypto not available. Use a modern browser + secure context (https/localhost).');
+      }
+
+      const keyBytes = to16Bytes(keyStr);
+      const ivBytes  = to16Bytes(ivStr);
+      const plainBytes = te.encode(data);
+
+      const cryptoKey = await crypto.subtle.importKey(
+        'raw',
+        keyBytes,
+        { name: 'AES-CBC' },
+        false,
+        ['encrypt']
+      );
+
+      const cipherBuf = await crypto.subtle.encrypt(
+        { name: 'AES-CBC', iv: ivBytes },
+        cryptoKey,
+        plainBytes
+      );
+
+      const cipherBytes = new Uint8Array(cipherBuf);
+      const b64 = bytesToBase64(cipherBytes);
+      return encodeURIComponent(b64);
+    }
+
+    // --- UI wiring ---
+    const dataEl = document.getElementById('data');
+    const keyEl  = document.getElementById('key');
+    const ivEl   = document.getElementById('iv');
+    const outEl  = document.getElementById('out');
+
+    document.getElementById('encryptBtn').addEventListener('click', async () => {
+      outEl.value = '';
+      setStatus('Encrypting…');
+      try {
+        const result = await encrypt_request_js(dataEl.value, keyEl.value, ivEl.value);
+        outEl.value = result;
+        setStatus('Done. Output is URL-encoded Base64 ciphertext.', true);
+      } catch (e) {
+        outEl.value = '';
+        setStatus('ERROR: ' + (e?.message || e), false);
+      }
+    });
+
+    document.getElementById('copyBtn').addEventListener('click', async () => {
+      try {
+        if (!outEl.value) return setStatus('Nothing to copy yet.', false);
+        await navigator.clipboard.writeText(outEl.value);
+        setStatus('Copied to clipboard.', true);
+      } catch {
+        // Fallback for older browsers
+        outEl.focus();
+        outEl.select();
+        document.execCommand('copy');
+        setStatus('Copied (fallback).', true);
+      }
+    });
+
+    document.getElementById('clearBtn').addEventListener('click', () => {
+      outEl.value = '';
+      setStatus('Cleared.', true);
+    });
+
+    // Insert current UNIX timestamp (seconds) into the "time" field inside the JSON template
+    document.getElementById('tsBtn').addEventListener('click', () => {
+      const ts = Math.floor(Date.now() / 1000);
+
+      const template = {
+        time: String(ts),
+        username: "",
+        password: "",
+        type: "getCards",
+        catId: "37"
+      };
+
+      try {
+        const current = JSON.parse(dataEl.value);
+        // Keep existing fields but force-update time
+        const next = { ...template, ...current, time: String(ts) };
+        dataEl.value = JSON.stringify(next, null, 2);
+      } catch {
+        // If the textarea isn't valid JSON, reset to the template
+        dataEl.value = JSON.stringify(template, null, 2);
+      }
+
+      setStatus('Updated JSON time (seconds): ' + ts, true);
+    });
+
+    // Initial status
+    setStatus('Ready. Tip: run with localhost for WebCrypto (e.g., python -m http.server 8080).');
+  </script>
+</body>
+</html>
