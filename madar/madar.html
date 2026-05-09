@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مدار - نظام الدفع الرقمي</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f8fafc;
+            scroll-behavior: smooth;
+        }
+        .brand-primary { color: #0ea5e9; }
+        .bg-brand-primary { background-color: #0ea5e9; }
+        .border-brand-primary { border-color: #0ea5e9; }
+        .shadow-brand-primary { shadow-color: rgba(14, 165, 233, 0.2); }
+
+        .orbit-bg {
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(14, 165, 233, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, rgba(99, 102, 241, 0.05) 0%, transparent 40%);
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .perspective-2000 {
+            perspective: 2000px;
+        }
+
+        /* 3D Slider Styles */
+        .slide-card {
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            position: absolute;
+            inset: 0;
+            border-radius: 2.5rem;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        @media (min-width: 768px) {
+            .slide-card { border-radius: 3.5rem; }
+        }
+
+        .slide-card.center { transform: translateZ(0) translateX(0) scale(1) rotateY(0); opacity: 1; z-index: 30; filter: blur(0px); }
+        .slide-card.next { transform: translateZ(-150px) translateX(130px) scale(0.8) rotateY(-20deg); opacity: 0.5; z-index: 20; filter: blur(2px); }
+        .slide-card.prev { transform: translateZ(-150px) translateX(-130px) scale(0.8) rotateY(20deg); opacity: 0.5; z-index: 10; filter: blur(2px); }
+        .slide-card.hidden { transform: translateZ(-300px) opacity: 0; scale: 0.7; z-index: 0; filter: blur(4px); }
+
+        /* Animations */
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .animate-scroll {
+            animation: scroll 25s linear infinite;
+        }
+
+        @keyframes bounce-slow {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .animate-bounce-slow {
+            animation: bounce-slow 2s ease-in-out infinite;
+        }
+
+        @keyframes fade-in-up {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in-up {
+            animation: fade-in-up 0.6s ease-out forwards;
+        }
+    </style>
+</head>
+<body>
+    <!-- Back to Portal -->
+    <a href="index.html" id="back-to-portal"
+       style="position:fixed;bottom:24px;left:24px;z-index:999;
+              display:inline-flex;align-items:center;gap:10px;
+              background:#0f172a;color:#fff;font-family:Tajawal,sans-serif;
+              font-weight:900;font-size:13px;padding:12px 20px;
+              border-radius:50px;box-shadow:0 8px 32px rgba(0,0,0,0.35);
+              text-decoration:none;transition:transform 0.2s,box-shadow 0.2s;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+             style="width:16px;height:16px;transform:scaleX(-1)">
+          <path d="M19 12H5M12 5l-7 7 7 7"/>
+        </svg>
+        العودة للبوابة
+    </a>
+
+    <div class="fixed top-0 left-0 w-full h-full orbit-bg pointer-events-none -z-10"></div>
+
+    <!-- Header Navigation -->
+    <nav class="sticky top-0 z-50 glass-panel border-b border-slate-200/60 p-4">
+        <div class="max-w-7xl mx-auto flex items-center justify-between h-12">
+            <div class="flex items-center gap-8">
+                <div class="text-2xl font-bold text-[#0ea5e9] flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg bg-[#0ea5e9] flex items-center justify-center text-white">
+                        <i data-lucide="globe" size="18"></i>
+                    </div>
+                    MADAR
+                </div>
+                <div class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600">
+                    <a href="#" class="hover:text-[#0ea5e9] transition-colors">الرئيسية</a>
+                    <a href="#" class="hover:text-[#0ea5e9] transition-colors">عن مدار</a>
+                    <a href="#" class="hover:text-[#0ea5e9] transition-colors">خدماتنا</a>
+                    <a href="#" class="hover:text-[#0ea5e9] transition-colors">مواقعنا في اليمن</a>
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <button class="hidden sm:block text-[#0ea5e9] font-bold text-sm px-6 py-2.5 rounded-full bg-[#0ea5e91a] hover:bg-[#0ea5e933] transition-all">
+                    دخول النظام
+                </button>
+                <button onclick="showSection('card-selection')" class="bg-[#0ea5e9] text-white font-bold text-sm px-8 py-2.5 rounded-full shadow-lg hover:scale-105 active:scale-95 transition-all">
+                    اربط بطاقتك
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Wrapper -->
+    <main id="main-content" class="w-full max-w-7xl mx-auto px-4 md:px-6 py-6 md:py-10 flex flex-col gap-10 md:gap-16">
+        
+        <!-- Hero Slider Section -->
+        <section class="w-full flex flex-col items-center">
+            <div id="slider-container" class="relative w-full max-w-5xl h-[360px] md:h-[500px] perspective-2000">
+                <!-- Slides will be injected here by script.js -->
+            </div>
+
+            <!-- Controls -->
+            <div class="mt-8 flex flex-col items-center gap-6">
+                <div class="flex items-center gap-4 bg-white/60 backdrop-blur-2xl p-1.5 rounded-2xl border border-slate-200">
+                    <button onclick="prevSlide()" class="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-slate-600 hover:text-[#0ea5e9] hover:shadow-md transition-all border border-slate-100">
+                        <i data-lucide="chevron-left" size="18"></i>
+                    </button>
+                    <div id="slide-indicators" class="flex gap-2 px-1">
+                        <!-- Indicators injected here -->
+                    </div>
+                    <button onclick="nextSlide()" class="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-slate-600 hover:text-[#0ea5e9] hover:shadow-md transition-all border border-slate-100">
+                        <i data-lucide="chevron-left" size="18" class="rotate-180"></i>
+                    </button>
+                </div>
+
+                <!-- Scroll Hint -->
+                <div class="flex flex-col items-center gap-3 opacity-60">
+                    <span class="text-[#0ea5e9] font-black text-[9px] uppercase tracking-[0.3em]">استكشف المزيد</span>
+                    <div class="w-[1px] h-12 bg-gradient-to-b from-[#0ea5e966] to-transparent relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-transparent via-[#0ea5e9] to-transparent animate-bounce-slow" style="animation-duration: 1.5s;"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Locations Section -->
+        <section class="w-full">
+            <div class="flex flex-row-reverse items-center justify-between mb-8 border-b border-slate-100 pb-6 gap-6">
+                <div class="text-right">
+                    <h3 class="text-2xl md:text-3xl font-bold text-slate-800 mb-1 tracking-tight">أماكن تواجدنا</h3>
+                    <p class="text-slate-500 text-xs md:text-sm">تجد وكلائنا المعتمدين في جميع المحافظات لخدمتكم بشكل مباشر</p>
+                </div>
+                <button id="toggle-locations" class="text-[#0ea5e9] font-bold text-xs md:text-sm px-6 py-2.5 rounded-xl bg-[#0ea5e91a] hover:bg-[#0ea5e9] hover:text-white transition-all">
+                    عرض الكل
+                </button>
+            </div>
+            <div id="locations-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
+                <!-- Locations injected here -->
+            </div>
+        </section>
+
+        <!-- Payment Partners (Charging) -->
+        <section class="w-full py-8 md:py-12 bg-white rounded-[2.5rem] border border-slate-100 overflow-hidden relative shadow-sm">
+            <div class="text-center mb-8 px-6">
+                <h3 class="text-xl md:text-3xl font-black text-slate-800 mb-2">يمكنك شحن الرصيد من المحافظ التالية</h3>
+                <p class="text-slate-400 text-xs md:text-sm font-medium">نظام المدار مدمج مع أكبر المصارف والمحافظ الإلكترونية لتسهيل الشحن الفوري</p>
+            </div>
+            <div class="flex overflow-hidden">
+                <div id="partners-scroll" class="flex gap-6 items-center whitespace-nowrap min-w-max px-4 animate-scroll">
+                    <!-- Partner logos injected here (duplicated for infinite loop) -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Retail Payment Section -->
+        <section class="w-full py-10 bg-slate-900 rounded-[3rem] overflow-hidden relative text-white">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-[#0ea5e91a] blur-[100px]"></div>
+            <div class="text-center mb-10 px-6 relative z-10">
+                <h3 class="text-2xl md:text-3xl font-black mb-2 tracking-tight">نقبل الدفع في</h3>
+                <p class="text-slate-400 text-sm font-medium">استخدم بطاقة مدار في أرقى المولات، المحلات، والحدائق بنقرة واحدة</p>
+            </div>
+            <div id="retail-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 px-6 relative z-10">
+                <!-- Retail cards injected here -->
+            </div>
+        </section>
+
+        <!-- Linking Instructions Summary -->
+        <section class="w-full bg-[#6366f10d] rounded-[3rem] p-10 md:p-20 border border-[#0ea5e91a] relative overflow-hidden">
+            <div class="text-center mb-16">
+                <h3 class="text-3xl md:text-5xl font-bold text-slate-800 mb-6 tracking-tight">كيف تقوم بربط بطاقتك؟</h3>
+                <p class="text-slate-500 text-lg max-w-2xl mx-auto">عملية بسيطة وسريعة تمكنك من الدخول إلى عالم المدفوعات الرقمية في دقائق معدودة.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative z-10">
+                <div class="text-right space-y-4">
+                    <div class="text-4xl font-black text-[#0ea5e91a]">01</div>
+                    <div class="w-12 h-12 bg-[#0ea5e9] text-white flex items-center justify-center rounded-2xl shadow-lg"><i data-lucide="credit-card"></i></div>
+                    <h4 class="text-xl font-black text-slate-800">احصل على البطاقة</h4>
+                    <p class="text-slate-500 text-sm">قم بزيارة أقرب وكيل معتمد لمدار واحصل على بطاقتك المفضلة.</p>
+                </div>
+                <div class="text-right space-y-4">
+                    <div class="text-4xl font-black text-[#0ea5e91a]">02</div>
+                    <div class="w-12 h-12 bg-[#0ea5e9] text-white flex items-center justify-center rounded-2xl shadow-lg"><i data-lucide="shield-check"></i></div>
+                    <h4 class="text-xl font-black text-slate-800">أدخل البيانات</h4>
+                    <p class="text-slate-500 text-sm">أدخل رقم البطاقة ورمز الأمان (CVV) المطبوع على البطاقة.</p>
+                </div>
+                <div class="text-right space-y-4">
+                    <div class="text-4xl font-black text-[#0ea5e91a]">03</div>
+                    <div class="w-12 h-12 bg-[#0ea5e9] text-white flex items-center justify-center rounded-2xl shadow-lg"><i data-lucide="smartphone"></i></div>
+                    <h4 class="text-xl font-black text-slate-800">تأكيد العملية</h4>
+                    <p class="text-slate-500 text-sm">ستصلك رسالة نصية تحتوى على رمز تفعيل البطاقة فوراً.</p>
+                </div>
+                <div class="text-right space-y-4">
+                    <div class="text-4xl font-black text-[#0ea5e91a]">04</div>
+                    <div class="w-12 h-12 bg-[#0ea5e9] text-white flex items-center justify-center rounded-2xl shadow-lg"><i data-lucide="zap"></i></div>
+                    <h4 class="text-xl font-black text-slate-800">ابدأ الاستخدام</h4>
+                    <p class="text-slate-500 text-sm">الآن بطاقتك مربوطة، يمكنك الشراء والدفع بضغطة زر.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Card Selection Overlay -->
+    <section id="card-selection" class="hidden fixed inset-0 z-[60] bg-[#f8fafc] flex flex-col items-center justify-center p-6 text-right fade-in-up">
+        <div class="max-w-4xl w-full">
+            <div class="text-center mb-12">
+                <div class="w-16 h-16 bg-[#0ea5e9] rounded-2xl flex items-center justify-center text-white mx-auto mb-6 shadow-xl">
+                    <i data-lucide="globe" size="32"></i>
+                </div>
+                <h1 class="text-4xl font-bold text-slate-800 mb-4 tracking-tight">نحن ندعم البطائق التالية</h1>
+                <p class="text-slate-500 text-lg">شركاؤنا المعتمدون، يرجى اختيار نوع بطاقتك للبدء</p>
+            </div>
+            <div id="card-types-grid" class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+                <!-- Card types injected here -->
+            </div>
+            <button onclick="showSection('main-content')" class="mt-8 text-slate-400 hover:text-slate-600 font-bold transition-all flex items-center gap-2 mx-auto">
+                <i data-lucide="chevron-left" class="rotate-180"></i>
+                <span>الرجوع</span>
+            </button>
+        </div>
+    </section>
+
+    <!-- Linking Process Overlay -->
+    <section id="linking-process" class="hidden fixed inset-0 z-[70] bg-[#f1f5f9] flex flex-col items-center justify-center p-4 md:p-8 text-right fade-in-up">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(14,165,233,0.08),transparent_50%)] pointer-events-none"></div>
+        
+        <!-- Top Controls -->
+        <div class="fixed top-8 left-8 right-8 z-[80] flex justify-between items-center">
+            <button onclick="prevStep()" class="flex items-center gap-2 text-slate-500 hover:text-[#0ea5e9] font-bold transition-all px-6 py-3 rounded-full bg-white shadow-lg pointer-events-auto">
+                <i data-lucide="chevron-left" class="rotate-180"></i>
+                <span>رجوع</span>
+            </button>
+            <button onclick="showSection('main-content')" class="w-12 h-12 flex items-center justify-center text-slate-400 hover:text-red-500 transition-all rounded-full bg-white shadow-lg">
+                <i data-lucide="x" size="24"></i>
+            </button>
+        </div>
+
+        <div class="w-full max-w-2xl relative z-10">
+            <!-- Stepper -->
+            <div id="linking-stepper" class="flex flex-row-reverse items-center justify-center gap-2 md:gap-4 w-full mb-12">
+                <!-- Steps injected here -->
+            </div>
+
+            <!-- Form Card -->
+            <div id="form-container" class="bg-white rounded-[3rem] p-8 md:p-14 border border-slate-100 shadow-2xl relative overflow-hidden min-h-[400px] flex flex-col justify-center">
+                <div class="absolute top-0 left-0 w-full h-2 bg-[#0ea5e91a]"></div>
+                <div id="step-content">
+                    <!-- Step content injected here -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-white mt-16 p-10 md:p-20 text-right">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+            <div class="space-y-6">
+                <div class="text-3xl font-black text-[#0ea5e9]">MADAR</div>
+                <p class="text-slate-400 leading-relaxed font-medium">نظام المدار الرقمي يهدف لتغيير الطريقة التي تتعامل بها مع أموالك في اليمن، من خلال توفير حلول دفع ذكية، آمنة، وفورية.</p>
+                <div class="flex gap-4">
+                    <div class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#0ea5e9] transition-colors"><i data-lucide="phone-call" size="18"></i></div>
+                    <div class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#0ea5e9] transition-colors"><i data-lucide="mail" size="18"></i></div>
+                    <div class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#0ea5e9] transition-colors"><i data-lucide="globe" size="18"></i></div>
+                </div>
+            </div>
+            <div class="space-y-4">
+                <h4 class="text-xl font-bold">خدماتنا</h4>
+                <ul class="text-slate-400 space-y-2">
+                    <li><a href="#" class="hover:text-white">ربط البطاقات البنكية</a></li>
+                    <li><a href="#" class="hover:text-white">شحن الرصيد الفوري</a></li>
+                    <li><a href="#" class="hover:text-white">التحويل بين المحافظ</a></li>
+                    <li><a href="#" class="hover:text-white">نقاط البيع والمولات</a></li>
+                </ul>
+            </div>
+            <div class="space-y-4">
+                <h4 class="text-xl font-bold">المزيد</h4>
+                <ul class="text-slate-400 space-y-2">
+                    <li><a href="#" class="hover:text-white">عن الشركة</a></li>
+                    <li><a href="#" class="hover:text-white">برنامج الوكلاء</a></li>
+                    <li><a href="#" class="hover:text-white">الأمن والخصوصية</a></li>
+                    <li><a href="#" class="hover:text-white">الشروط والأحكام</a></li>
+                </ul>
+            </div>
+            <div class="space-y-6">
+                <h4 class="text-xl font-bold">حمل التطبيق</h4>
+                <div class="space-y-3">
+                    <div class="bg-white/5 border border-white/10 p-4 rounded-2xl flex items-center gap-4 hover:bg-white/10 transition-colors cursor-pointer">
+                        <i data-lucide="apple" size="28"></i>
+                        <div class="text-right">
+                            <div class="text-[10px] text-slate-400 font-bold uppercase">Download on</div>
+                            <div class="text-lg font-bold">App Store</div>
+                        </div>
+                    </div>
+                    <div class="bg-white/5 border border-white/10 p-4 rounded-2xl flex items-center gap-4 hover:bg-white/10 transition-colors cursor-pointer">
+                        <i data-lucide="smartphone" size="28"></i>
+                        <div class="text-right">
+                            <div class="text-[10px] text-slate-400 font-bold uppercase">Get it on</div>
+                            <div class="text-lg font-bold">Google Play</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto mt-16 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6 text-slate-500 text-sm">
+            <p>© 2024 نظام المدار الرقمي. جميع الحقوق محفوظة.</p>
+            <div class="flex gap-8 font-black text-[10px] tracking-widest uppercase">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="shield-check" size="14"></i>
+                    <span>Encrypted</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <i data-lucide="lock" size="14"></i>
+                    <span>Secure</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script Data & Logic -->
+    <script>
+        // Data
+        const slides = [
+            { title: "تفعيل وربط بطاقتك", desc: "ابدأ رحلتك المالية برربط بطاقة مدار بحسابك في ثوانٍ معدودة وبكل أمان وسهولة لا تضاهى.", img: "https://images.unsplash.com/photo-1556742049-9742193bdca0?auto=format&fit=crop&q=80&w=1200", accent: "SECURE LINK" },
+            { title: "شبكة وكلاء واسعة", desc: "تجدنا في جميع محافظات الجمهورية اليمنية عبر نخبة من المحلات والمراكز التجارية المعتمدة.", img: "https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&q=80&w=1200", accent: "LOCAL REACH" },
+            { title: "حماية بياناتك أولويتنا", desc: "نستخدم أحدث تقنيات التشفير لضمان سرية معاملاتك المالية في كل وقت ومن كل مكان.", img: "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&q=80&w=1200", accent: "DATA PRIVACY" },
+            { title: "حلول دفع عصرية", desc: "استمتع بتجربة دفع رقمية متكاملة تدعم تطلعاتك نحو مستقبل مالي رقمي أكثر ذكاءً.", img: "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&q=80&w=1200", accent: "MODERN PAY" },
+            { title: "تحكم كامل بهاتفك", desc: "راقب مصروفاتك، حول أموالك، وقم بإدارة بطاقتك من تطبيق واحد بسيط وقوي.", img: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&q=80&w=1200", accent: "FULL CONTROL" }
+        ];
+
+        const locations = [
+            { shop: "مركز يمن تك التجاري", city: "صنعاء", location: "شارع حدة، مقابل مركز المدينة" },
+            { shop: "سوبر ماركت المنارة", city: "عدن", location: "خور مكسر، عمارة المنارة" },
+            { shop: "البركة للصرافة", city: "تعز", location: "شارع جمال، بجوار برج الأعمال" },
+            { shop: "عالم التقنية", city: "حضرموت", location: "سيئون، مجمع السوق المركزي" },
+            { shop: "مركز التضامن", city: "الحديدة", location: "شارع الميناء، مبنى التضامن" },
+            { shop: "المعرض الرقمي", city: "المكلا", location: "شارع الستين، عمارة النجاح" },
+            { shop: "مجمع الغروب", city: "إب", location: "وسط المدينة، تقاطع الدائري" },
+            { shop: "نجم سبأ", city: "مارب", location: "الشارع العام، عمارة السلام" },
+            { shop: "الرؤية الرقمية", city: "ذمار", location: "الشارع الرئيسي، حي الجامعة" }
+        ];
+
+        const cardTypes = [
+            { id: 'banki', name: 'بنكي', image: 'https://images.unsplash.com/photo-1550565118-3a14e8d0386f?auto=format&fit=crop&q=80&w=200' },
+            { id: 'enjaz', name: 'إنجاز', image: 'https://images.unsplash.com/photo-1560472355-536de3962603?auto=format&fit=crop&q=80&w=200' },
+            { id: 'jeeb', name: 'جيب', image: 'https://images.unsplash.com/photo-1621416848440-4369e15bc720?auto=format&fit=crop&q=80&w=200' },
+            { id: 'flousak', name: 'فلوسك', image: 'https://images.unsplash.com/photo-1518186285589-2f7649de83e0?auto=format&fit=crop&q=80&w=200' },
+        ];
+
+        // State
+        let currentSlide = 0;
+        let showingAllLocations = false;
+        let currentLinkingStep = 1;
+
+        // Initialization
+        window.onload = () => {
+            lucide.createIcons();
+            renderSlider();
+            renderLocations();
+            renderPartners();
+            renderRetail();
+            renderCardTypes();
+            startAutoSlide();
+        };
+
+        // Slider Logic
+        function renderSlider() {
+            const container = document.getElementById('slider-container');
+            const indicators = document.getElementById('slide-indicators');
+            container.innerHTML = '';
+            indicators.innerHTML = '';
+
+            slides.forEach((slide, i) => {
+                const card = document.createElement('div');
+                card.className = `slide-card ${getSlideClass(i)}`;
+                card.innerHTML = `
+                    <div class="absolute inset-0">
+                        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('${slide.img}')"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent"></div>
+                    </div>
+                    <div class="absolute inset-0 flex flex-col justify-end p-6 md:p-12 text-right">
+                        <div class="mb-3">
+                            <span class="text-[#0ea5e9] font-black tracking-widest text-[8px] md:text-xs uppercase bg-white/10 backdrop-blur-xl px-3 py-1.5 rounded-lg border border-white/10">
+                                ${slide.accent}
+                            </span>
+                        </div>
+                        <h2 class="text-2xl md:text-5xl font-black text-white mb-2 leading-tight">${slide.title}</h2>
+                        <p class="text-xs md:text-xl text-slate-300 mb-6 max-w-2xl font-medium line-clamp-2">${slide.desc}</p>
+                        ${i === currentSlide ? `
+                            <div class="flex gap-4">
+                                <button onclick="showSection('card-selection')" class="bg-[#0ea5e9] text-white px-8 md:px-10 py-3 md:py-4 rounded-xl md:rounded-2xl font-black text-xs md:text-base hover:shadow-xl transition-all flex items-center gap-2">
+                                    تفعيل الآن
+                                    <i data-lucide="arrow-up-right" size="18"></i>
+                                </button>
+                            </div>
+                        ` : ''}
+                    </div>
+                    ${i !== currentSlide ? '<div class="absolute inset-0 bg-slate-950/40 backdrop-blur-[1px] transition-opacity hover:opacity-0"></div>' : ''}
+                `;
+                card.onclick = () => { if(i !== currentSlide) goToSlide(i); };
+                container.appendChild(card);
+
+                // Indicator
+                const ind = document.createElement('button');
+                ind.className = `transition-all duration-500 rounded-full ${i === currentSlide ? 'w-10 h-1.5 bg-[#0ea5e9]' : 'w-1.5 h-1.5 bg-slate-300'}`;
+                ind.onclick = () => goToSlide(i);
+                indicators.appendChild(ind);
+            });
+            lucide.createIcons();
+        }
+
+        function getSlideClass(i) {
+            if (i === currentSlide) return 'center';
+            if (i === (currentSlide + 1) % slides.length) return 'next';
+            if (i === (currentSlide - 1 + slides.length) % slides.length) return 'prev';
+            return 'hidden';
+        }
+
+        function goToSlide(i) {
+            currentSlide = i;
+            renderSlider();
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            renderSlider();
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            renderSlider();
+        }
+
+        let autoSlideInterval;
+        function startAutoSlide() {
+            autoSlideInterval = setInterval(nextSlide, 6000);
+        }
+
+        // Section Toggling
+        function showSection(id) {
+            document.querySelectorAll('section, main').forEach(s => s.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+            if (id === 'linking-process') renderStep();
+            window.scrollTo(0, 0);
+        }
+
+        // Locations Logic
+        function renderLocations() {
+            const grid = document.getElementById('locations-grid');
+            const toggleBtn = document.getElementById('toggle-locations');
+            grid.innerHTML = '';
+            
+            const list = showingAllLocations ? locations : locations.slice(0, 5);
+            list.forEach(loc => {
+                const item = document.createElement('div');
+                item.className = 'glass-panel p-6 rounded-3xl transition-all text-right group relative overflow-hidden flex flex-col border border-slate-100 shadow-sm hover:shadow-lg hover:shadow-[#0ea5e90d] fade-in-up';
+                item.innerHTML = `
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-[#0ea5e90d] blur-2xl -mr-12 -mt-12 group-hover:bg-[#0ea5e91a] transition-colors"></div>
+                    <div class="w-12 h-12 bg-[#0ea5e91a] rounded-xl flex items-center justify-center mb-6 text-[#0ea5e9] group-hover:bg-[#0ea5e9] group-hover:text-white transition-all">
+                        <i data-lucide="map-pin" size="22"></i>
+                    </div>
+                    <span class="text-[#0ea5e9] font-black text-[10px] mb-2 uppercase tracking-widest">${loc.city}</span>
+                    <h4 class="text-slate-800 font-bold text-lg mb-2 leading-tight h-14 line-clamp-2">${loc.shop}</h4>
+                    <p class="text-slate-500 text-xs leading-relaxed line-clamp-2">${loc.location}</p>
+                `;
+                grid.appendChild(item);
+            });
+            
+            toggleBtn.onclick = () => {
+                showingAllLocations = !showingAllLocations;
+                toggleBtn.innerText = showingAllLocations ? 'عرض أقل' : 'عرض الكل';
+                renderLocations();
+            };
+            lucide.createIcons();
+        }
+
+        // Partners Animation
+        function renderPartners() {
+            const container = document.getElementById('partners-scroll');
+            const partners = [
+                { name: "محفظة جوال", logo: "📱" },
+                { name: "كريمي كاش", logo: "🏦" },
+                { name: "يمن كاش", logo: "💸" },
+                { name: "حاسب الرقمي", logo: "⚡" },
+                { name: "سداد اونلاين", logo: "🌐" },
+                { name: "كاش بوكس", logo: "📦" },
+                { name: "بوابة اليمن", logo: "🛡️" },
+                { name: "تداول للتحويل", logo: "♻️" }
+            ];
+            
+            const content = partners.map(p => `
+                <div class="flex items-center gap-3 bg-slate-50 px-6 py-4 rounded-2xl border border-slate-100 hover:border-[#0ea5e94d] transition-all cursor-default group">
+                    <span class="text-xl grayscale group-hover:grayscale-0 transition-all">${p.logo}</span>
+                    <span class="text-slate-600 font-bold text-sm md:text-base group-hover:text-[#0ea5e9] transition-colors">${p.name}</span>
+                </div>
+            `).join('');
+            
+            container.innerHTML = content + content; // Duplicate for continuous scroll
+        }
+
+        // Retail
+        function renderRetail() {
+            const grid = document.getElementById('retail-grid');
+            const categories = [
+                { name: "المولات التجارية", count: "40+", icon: "🏬" },
+                { name: "السوبر ماركت", count: "120+", icon: "🛒" },
+                { name: "الحدائق والمتنزهات", count: "15+", icon: "🌳" },
+                { name: "المطاعم والكافيهات", count: "85+", icon: "☕" },
+                { name: "محطات الوقود", count: "30+", icon: "⛽" }
+            ];
+            grid.innerHTML = categories.map(cat => `
+                <div class="bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 flex flex-col items-center text-center group hover:-translate-y-1 transition-all transition-transform">
+                    <span class="text-3xl mb-4 group-hover:scale-110 transition-transform">${cat.icon}</span>
+                    <h4 class="font-bold text-sm md:text-base mb-1">${cat.name}</h4>
+                    <span class="text-[#0ea5e9] font-black text-[10px]">${cat.count} موقع متاح</span>
+                </div>
+            `).join('');
+        }
+
+        // Card Types
+        function renderCardTypes() {
+            const grid = document.getElementById('card-types-grid');
+            grid.innerHTML = cardTypes.map(card => `
+                <button onclick="startLinking('${card.id}')" class="glass-panel p-6 md:p-8 rounded-[2rem] flex flex-col items-center justify-center gap-4 border-slate-200/60 hover:shadow-xl hover:shadow-[#0ea5e91a] transition-all group border border-slate-100">
+                    <div class="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-white flex items-center justify-center overflow-hidden border border-slate-100 group-hover:border-[#0ea5e966] transition-all shadow-sm">
+                        <img src="${card.image}" alt="${card.name}" class="w-full h-full object-contain p-2 transition-transform group-hover:scale-105">
+                    </div>
+                    <h3 class="text-xl md:text-2xl font-black text-slate-800 group-hover:text-[#0ea5e9] transition-colors tracking-tight">${card.name}</h3>
+                </button>
+            `).join('');
+        }
+
+        // Linking Process Logic
+        function startLinking(cardId) {
+            currentLinkingStep = 1;
+            showSection('linking-process');
+        }
+
+        function renderStep() {
+            const stepper = document.getElementById('linking-stepper');
+            const content = document.getElementById('step-content');
+            const steps = [
+                { id: 1, title: 'بيانات البطاقة', icon: 'credit-card' },
+                { id: 2, title: 'رمز الأمان', icon: 'shield-check' },
+                { id: 3, title: 'تسمية البطاقة', icon: 'mail' },
+                { id: 4, title: 'رمز التأكيد', icon: 'smartphone' },
+                { id: 5, title: 'تم الربط', icon: 'zap' }
+            ];
+
+            // Render Stepper
+            stepper.innerHTML = steps.map((s, i) => `
+                <div class="flex items-center gap-2 md:gap-4 flex-row-reverse">
+                    <div class="flex flex-col items-center gap-3">
+                        <div class="w-10 h-10 md:w-12 md:h-12 rounded-2xl flex items-center justify-center shadow-md transition-all ${currentLinkingStep >= s.id ? 'bg-[#0ea5e9] text-white' : 'bg-white text-slate-400 border border-slate-200'}">
+                            <i data-lucide="${currentLinkingStep > s.id ? 'shield-check' : s.icon}" size="20"></i>
+                        </div>
+                    </div>
+                    ${i < steps.length - 1 ? `<div class="h-[2px] transition-all duration-500 ${currentLinkingStep > s.id ? 'bg-[#0ea5e9] w-6 md:w-12' : 'bg-slate-200 w-4 md:w-8'}"></div>` : ''}
+                </div>
+            `).reverse().join('');
+
+            // Render Step Content
+            let stepHtml = '';
+            switch(currentLinkingStep) {
+                case 1:
+                    stepHtml = `
+                        <div class="space-y-10 fade-in-up">
+                            <div class="space-y-3">
+                                <span class="text-[#0ea5e9] font-black uppercase text-xs tracking-[0.2em]">Step 01 / 05</span>
+                                <h2 class="text-4xl font-black text-slate-800 tracking-tight">رقم البطاقة</h2>
+                                <p class="text-slate-500 font-medium">أدخل الرقم المكون من 16 خانة والمطبوع على واجه البطاقة</p>
+                            </div>
+                            <div class="space-y-6">
+                                <input type="text" placeholder="0000 0000 0000 0000" class="w-full p-6 md:p-8 bg-white rounded-3xl border-2 border-slate-100 focus:border-[#0ea5e9] outline-none text-right text-2xl font-mono tracking-[0.1em] shadow-sm">
+                                <button onclick="nextStep()" class="w-full bg-[#0ea5e9] text-white p-6 rounded-[2rem] font-bold text-xl shadow-2xl hover:scale-[1.02] transition-all">تأكيد ومتابعة</button>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 2:
+                    stepHtml = `
+                        <div class="space-y-10 fade-in-up">
+                            <div class="space-y-3">
+                                <span class="text-[#0ea5e9] font-black uppercase text-xs tracking-[0.2em]">Step 02 / 05</span>
+                                <h2 class="text-4xl font-black text-slate-800 tracking-tight">رمز الأمان</h2>
+                                <p class="text-slate-500 font-medium">أدخل كود الـ CVV السري المطبوع خلف البطاقة</p>
+                            </div>
+                            <div class="space-y-8">
+                                <div class="flex justify-center"><input type="password" placeholder="***" class="w-40 p-8 bg-white rounded-3xl border-2 border-slate-100 focus:border-[#0ea5e9] outline-none text-center text-4xl font-mono tracking-[0.5em] shadow-sm"></div>
+                                <button onclick="nextStep()" class="w-full bg-[#0ea5e9] text-white p-6 rounded-[2rem] font-bold text-xl shadow-2xl hover:scale-[1.02] transition-all">تأكيد الرمز</button>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 3:
+                    stepHtml = `
+                        <div class="space-y-10 fade-in-up">
+                            <div class="space-y-3">
+                                <span class="text-[#0ea5e9] font-black uppercase text-xs tracking-[0.2em]">Step 03 / 05</span>
+                                <h2 class="text-4xl font-black text-slate-800 tracking-tight">تسمية البطاقة</h2>
+                                <p class="text-slate-500 font-medium">اختر اسماً يسهل عليك تمييز هذه البطاقة</p>
+                            </div>
+                            <div class="space-y-8">
+                                <input type="text" placeholder="مثال: بطاقة المصاريف الشخصية" class="w-full p-8 bg-white rounded-3xl border-2 border-slate-100 focus:border-[#0ea5e9] outline-none text-right text-xl font-bold shadow-sm">
+                                <button onclick="nextStep()" class="w-full bg-[#0ea5e9] text-white p-6 rounded-[2rem] font-bold text-xl shadow-2xl hover:scale-[1.02] transition-all">حفظ ومتابعة</button>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 4:
+                    stepHtml = `
+                        <div class="space-y-10 fade-in-up">
+                            <div class="space-y-3">
+                                <span class="text-[#0ea5e9] font-black uppercase text-xs tracking-[0.2em]">Step 04 / 05</span>
+                                <h2 class="text-4xl font-black text-slate-800 tracking-tight">رسالة التأكيد</h2>
+                                <p class="text-slate-500 font-medium">أرسلنا كود التحقق إلى هاتفك المنتهي بـ <span class="text-[#0ea5e9] font-bold">****882</span></p>
+                            </div>
+                            <div class="space-y-8">
+                                <div class="flex flex-row-reverse justify-center gap-3">
+                                    ${[1,2,3,4,5,6].map(() => `<input type="text" maxLength="1" class="w-10 md:w-12 h-14 md:h-16 bg-white rounded-2xl border-2 border-slate-100 focus:border-[#0ea5e9] outline-none text-center text-2xl font-black shadow-sm">`).join('')}
+                                </div>
+                                <button onclick="nextStep()" class="w-full bg-[#0ea5e9] text-white p-6 rounded-[2rem] font-bold text-xl shadow-2xl hover:scale-[1.02] transition-all">تفعيل الآن</button>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 5:
+                    stepHtml = `
+                        <div class="text-center space-y-10 fade-in-up">
+                            <div class="relative">
+                                <div class="w-40 h-40 bg-gradient-to-br from-green-400 to-emerald-600 text-white rounded-full flex items-center justify-center mx-auto shadow-2xl scale-110">
+                                    <i data-lucide="zap" size="80"></i>
+                                </div>
+                            </div>
+                            <div class="space-y-4">
+                                <h2 class="text-5xl font-black text-slate-800 tracking-tighter">رائع بجدارة!</h2>
+                                <p class="text-slate-500 text-xl font-medium">تم ربط بطاقتك بنجاح. يمكنك الآن البدء في الاستخدام.</p>
+                            </div>
+                            <button onclick="showSection('main-content')" class="w-full bg-slate-900 text-white p-7 rounded-[2.5rem] font-bold text-2xl shadow-2xl transition-all flex items-center justify-center gap-4">
+                                <span>الانتقال للرئيسية</span>
+                                <i data-lucide="arrow-up-right" size="24"></i>
+                            </button>
+                        </div>
+                    `;
+                    setTimeout(() => { showSection('main-content'); }, 5000);
+                    break;
+            }
+            content.innerHTML = stepHtml;
+            lucide.createIcons();
+        }
+
+        function nextStep() {
+            if (currentLinkingStep < 5) {
+                currentLinkingStep++;
+                renderStep();
+            }
+        }
+
+        function prevStep() {
+            if (currentLinkingStep > 1) {
+                currentLinkingStep--;
+                renderStep();
+            } else {
+                showSection('card-selection');
+            }
+        }
+    </script>
+</body>
+</html>
